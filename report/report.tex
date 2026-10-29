@@ -43,6 +43,7 @@
 \usepackage{titlesec}
 \usepackage{needspace}
 \usepackage[font=small,labelfont=bf]{caption}
+\usepackage{flushend}          % balance the two columns on the last page
 \usepackage[hidelinks]{hyperref}
 \hypersetup{pdftitle={\projecttitle},
             pdfsubject={CSE558 Data Science, Monsoon 2026: Midterm Project Report}}
@@ -55,8 +56,10 @@
 \titlespacing*{\section}{0pt}{12pt}{3pt}
 \titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.5em}{}
 \titlespacing*{\subsection}{0pt}{10pt}{2pt}
-\newcommand{\sectionbreak}{\needspace{10\baselineskip}}
-\newcommand{\subsectionbreak}{\needspace{10\baselineskip}}
+% Headings only need room for themselves and a few lines; titlesec already keeps them with
+% what follows. (The template's 10-line reserve left gaps at column ends.)
+\newcommand{\sectionbreak}{\needspace{4\baselineskip}}
+\newcommand{\subsectionbreak}{\needspace{4\baselineskip}}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
@@ -67,14 +70,24 @@
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{K}[1]{>{\raggedright\arraybackslash\bfseries\boldmath}p{#1}}  % bold labels
 
+% Columns end where their text ends: no stretching of the space between blocks to reach the
+% bottom margin (the tables below can split between rows, so what is left over is small).
+\raggedbottom
+% Even spacing around figures and captions
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\captionsetup{skip=3pt}
+
 %--------------------------------------------------------- shorthands
 \newcommand{\hint}[1]{\ifshowhints{\footnotesize\itshape\color{hintgrey}#1\par}\fi}
 % The worked example was light blue; our own text is set in normal ink.
 \newcommand{\eg}[1]{#1}
 \newcommand{\egblock}[1]{{#1\par}}
 \newcommand{\field}[2]{\textbf{#1}~\eg{#2}\par}
-\newcommand{\tpart}[2]{\par\needspace{12\baselineskip}\smallskip\textbf{#1)~#2}\par}
-\newcommand{\minihead}[1]{\par\needspace{8\baselineskip}\smallskip\textbf{#1}\par}
+% Small headings stay glued to what follows (no space reserve, which forced early breaks).
+\newcommand{\tpart}[2]{\par\smallskip\textbf{#1)~#2}\par\nopagebreak}
+\newcommand{\minihead}[1]{\par\smallskip\textbf{#1}\par\nopagebreak}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\figfile}[2]{%
   \IfFileExists{#1}%
@@ -83,6 +96,34 @@
       {\centering\small\itshape\color{hintgrey}Your plot: \detokenize{#1}}}}}
 % Details only the group can supply (shown in red until replaced).
 \newcommand{\fillin}[1]{\textcolor{red}{[#1]}}
+
+%------------------------------------------------ tables that break between rows
+% A tabularx box cannot split, so a long table that does not fit leaves a gap at the foot of
+% a column. Here every row is its own box with the same column widths, stacked with no space
+% between them: the table looks the same but can continue in the next column between any two
+% rows. The first two and last two rows are kept together so no row is left on its own.
+\newenvironment{flowtable}{\par\setlength{\parskip}{0pt}}{\par}
+\newcommand{\rowbox}[3]{\par\nointerlineskip\noindent{#1\begin{tabularx}{\linewidth}{#2}#3\end{tabularx}}\par}
+% the first box of a table: a little air above its top rule so it never touches the text
+\newcommand{\rowboxtop}[3]{\par\vspace{4pt}\nointerlineskip\noindent{#1\begin{tabularx}{\linewidth}{#2}#3\end{tabularx}}\par}
+% three-column tables: #1, #2 = widths of the first two columns
+\newcommand{\threehead}[5]{\rowboxtop{\footnotesize}{@{}L{#1} L{#2} Y@{}}{\toprule\textbf{#3} & \textbf{#4} & \textbf{#5}\\\midrule}\nopagebreak}
+\newcommand{\threefirst}[5]{\rowbox{\footnotesize}{@{}L{#1} L{#2} Y@{}}{#3 & #4 & #5\\}\nopagebreak}
+\newcommand{\threerow}[5]{\rowbox{\footnotesize}{@{}L{#1} L{#2} Y@{}}{#3 & #4 & #5\\}}
+\newcommand{\threelast}[5]{\nopagebreak\rowbox{\footnotesize}{@{}L{#1} L{#2} Y@{}}{#3 & #4 & #5\\\bottomrule}}
+% key-value tables (hypotheses and results)
+\newcommand{\kvfirst}[2]{\rowboxtop{\small}{@{}K{3.4cm} Y@{}}{\toprule #1 & #2\\}}
+\newcommand{\kvrow}[2]{\rowbox{\small}{@{}K{3.4cm} Y@{}}{#1 & #2\\}}
+\newcommand{\kvlast}[2]{\nopagebreak\rowbox{\small}{@{}K{3.4cm} Y@{}}{#1 & #2\\\bottomrule}}
+% "also considered" tables
+\newcommand{\althead}{\rowboxtop{\footnotesize}{@{}L{2.3cm} Y@{}}{\toprule\textbf{Also considered} & \textbf{Why we did not use it}\\\midrule}\nopagebreak}
+\newcommand{\altfirst}[2]{\rowbox{\footnotesize}{@{}L{2.3cm} Y@{}}{#1 & #2\\}\nopagebreak}
+\newcommand{\altrow}[2]{\rowbox{\footnotesize}{@{}L{2.3cm} Y@{}}{#1 & #2\\}}
+\newcommand{\altlast}[2]{\nopagebreak\rowbox{\footnotesize}{@{}L{2.3cm} Y@{}}{#1 & #2\\\bottomrule}}
+% shorthands for the three-column tables used below
+\newcommand{\KF}{{2.55cm}{1.4cm}}   % key features
+\newcommand{\PR}{{1.95cm}{2.2cm}}   % data preparation
+\newcommand{\BA}{{3.1cm}{1.5cm}}    % before and after
 
 %=======================================================================
 \begin{document}
@@ -150,114 +191,58 @@ room-type and 22 property-type indicators and 100 amenity indicators to 48 numer
 columns.}
 
 \minihead{Key features}
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{2.55cm} L{1.4cm} Y@{}}
-\toprule
-\textbf{Feature} & \textbf{Type} & \textbf{Real-world meaning} \\
-\midrule
-\code{review\_scores\_\allowbreak rating} & continuous & average overall guest rating, 1--5 stars; response for P1 \\
-\code{review\_scores\_\allowbreak accuracy} & continuous & average ``did the place match its page?'' score; response for P2 \\
-\code{host\_london\_\allowbreak listings} & discrete & listings the host runs in London (1--501), recounted after removing duplicates \\
-\code{neighbourhood\_\allowbreak cleansed} & nominal & London borough, 33 levels \\
-\code{room\_type} & nominal & entire home, private room, hotel room, shared room \\
-\code{bedrooms} & discrete & bedrooms, 0 (studio) to 30 \\
-\code{price} & continuous & nightly price in GBP, \pounds10 to \pounds75{,}000 \\
-\code{number\_of\_\allowbreak reviews} & discrete & reviews behind the averages, 0 to 1{,}959 \\
-\code{hype\_count} & discrete & marketing superlatives in the description, 0 to 10 (derived) \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\expandafter\threehead\KF{Feature}{Type}{Real-world meaning}
+\expandafter\threefirst\KF{\code{review\_scores\_\allowbreak rating}}{continuous}{average overall guest rating, 1--5 stars; response for P1}
+\expandafter\threerow\KF{\code{review\_scores\_\allowbreak accuracy}}{continuous}{average ``did the place match its page?'' score; response for P2}
+\expandafter\threerow\KF{\code{host\_london\_\allowbreak listings}}{discrete}{listings the host runs in London (1--501), recounted after removing duplicates}
+\expandafter\threerow\KF{\code{neighbourhood\_\allowbreak cleansed}}{nominal}{London borough, 33 levels}
+\expandafter\threerow\KF{\code{room\_type}}{nominal}{entire home, private room, hotel room, shared room}
+\expandafter\threerow\KF{\code{bedrooms}}{discrete}{bedrooms, 0 (studio) to 30}
+\expandafter\threerow\KF{\code{price}}{continuous}{nightly price in GBP, \pounds10 to \pounds75{,}000}
+\expandafter\threerow\KF{\code{number\_of\_\allowbreak reviews}}{discrete}{reviews behind the averages, 0 to 1{,}959}
+\expandafter\threelast\KF{\code{hype\_count}}{discrete}{marketing superlatives in the description, 0 to 10 (derived)}
+\end{flowtable}
 
 The full data dictionary (type, unit, range and missingness of all 90 raw and 11 derived
 attributes) is \code{docs/data\_dictionary.md} in the repository.
 
 %-----------------------------------------------------------------------
-% The template's \needspace before a section miscounts the space left on page 1 of a
-% two-column document and pushed this section to page 2; it is switched off here only.
-\begingroup\renewcommand{\sectionbreak}{}
 \section{Data preparation}
-\endgroup
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
-\toprule
-\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
-\midrule
-15 columns 100\% empty (e.g.\ \code{license})
- & dropped
- & Airbnb no longer exposes them; nothing to impute from \\
-7 redundant columns (5 price quotes, 2 constant)
- & dropped
- & the quoted price equals \code{price} for 99.8\% of listings \\
-\code{price} is text, \code{"\$267.50"}
- & parsed to a number in GBP
- & a format fix; the \$ is an export artefact, the quotes say GBP \\
-\bottomrule
-\end{tabularx}}
-
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
-\toprule
-\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
-\midrule
-32{,}049 prices missing (34.9\%)
- & kept, flagged, not imputed
- & 92.7\% were carried over from an earlier scrape and 87.3\% have zero availability (0.5\% of priced ones): they cannot be booked, so an imputed price would invent a market. No test uses price \\
-20{,}694 ratings missing
- & kept, flagged; tests use only listings with 10+ reviews
- & no reviews means no rating, not a bad one; 10 is also the stay count Airbnb requires for Superhost \\
-7 rows with a score average below 1
- & scores set to missing, flagged
- & a 1--5 star average cannot be below 1: these are recording errors \\
-\bottomrule
-\end{tabularx}}
-
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
-\toprule
-\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
-\midrule
-179 units listed twice (173 same host, name and spot; 6 same text and spot under two accounts)
- & extra copies dropped, the one with most reviews kept
- & 95 copies belong to hosts with 10+ listings, the group P1 studies; left in, they would count those hosts twice \\
-bathrooms only as text, 47 forms
- & parsed to a count plus shared and private flags
- & one string carries two facts \\
-540 prices outside the log-price IQR fences, \pounds19 and \pounds1{,}366
- & capped at the fences, flagged
- & prices are right-skewed (median \pounds175, max \pounds75{,}000), so fences go on log price; raw-scale fences would cut ordinary luxury homes \\
-24 minimum stays above 365 nights (max 1{,}125)
- & capped at 365, flagged
- & 1{,}125 is Airbnb's form maximum, a placeholder for ``long lets only'' \\
-HTML in 47{,}950 descriptions
- & tags stripped
- & markup is not words; needed before counting hype words \\
-89 property types; 9{,}477 amenity strings
- & 21 types with 30+ exploration rows kept, rest \code{Other}; 100 commonest amenities as 0/1
- & rare levels give unstable estimates; fences and levels are fitted on the exploration split only, so the confirmation split stays unseen \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\expandafter\threehead\PR{Issue found}{What we did}{Why, and not the alternative}
+\expandafter\threefirst\PR{15 columns 100\% empty (e.g.\ \code{license})}{dropped}{Airbnb no longer exposes them; nothing to impute from}
+\expandafter\threerow\PR{7 redundant columns (5 price quotes, 2 constant)}{dropped}{the quoted price equals \code{price} for 99.8\% of listings}
+\expandafter\threerow\PR{\code{price} is text, \code{"\$267.50"}}{parsed to a number in GBP}{a format fix; the \$ is an export artefact, the quotes say GBP}
+\expandafter\threerow\PR{32{,}049 prices missing (34.9\%)}{kept, flagged, not imputed}{92.7\% were carried over from an earlier scrape and 87.3\% have zero availability (0.5\% of priced ones): they cannot be booked, so an imputed price would invent a market. No test uses price}
+\expandafter\threerow\PR{20{,}694 ratings missing}{kept, flagged; tests use only listings with 10+ reviews}{no reviews means no rating, not a bad one; 10 is also the stay count Airbnb requires for Superhost}
+\expandafter\threerow\PR{7 rows with a score average below 1}{scores set to missing, flagged}{a 1--5 star average cannot be below 1: these are recording errors}
+\expandafter\threerow\PR{179 units listed twice (173 same host, name and spot; 6 same text and spot under two accounts)}{extra copies dropped, the one with most reviews kept}{95 copies belong to hosts with 10+ listings, the group P1 studies; left in, they would count those hosts twice}
+\expandafter\threerow\PR{bathrooms only as text, 47 forms}{parsed to a count plus shared and private flags}{one string carries two facts}
+\expandafter\threerow\PR{540 prices outside the log-price IQR fences, \pounds19 and \pounds1{,}366}{capped at the fences, flagged}{prices are right-skewed (median \pounds175, max \pounds75{,}000), so fences go on log price; raw-scale fences would cut ordinary luxury homes}
+\expandafter\threerow\PR{24 minimum stays above 365 nights (max 1{,}125)}{capped at 365, flagged}{1{,}125 is Airbnb's form maximum, a placeholder for ``long lets only''}
+\expandafter\threerow\PR{HTML in 47{,}950 descriptions}{tags stripped}{markup is not words; needed before counting hype words}
+\expandafter\threelast\PR{89 property types; 9{,}477 amenity strings}{21 types with 30+ exploration rows kept, rest \code{Other}; 100 commonest amenities as 0/1}{rare levels give unstable estimates; fences and levels are fitted on the exploration split only, so the confirmation split stays unseen}
+\end{flowtable}
 
 %-----------------------------------------------------------------------
 \section{What changed after preparation}
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{3.1cm} L{1.5cm} Y@{}}
-\toprule
-\textbf{Measure} & \textbf{Before} & \textbf{After} \\
-\midrule
-Rows & 91{,}954 & 91{,}775 \\
-Attributes & 90 & 219 \\
-Instances $\times$ attributes & 8{,}275{,}860 & 20{,}098{,}725 \\
-Empty columns & 15 & 0 \\
-Duplicate units & 179 & 0 \\
-Prices stored as text & 59{,}905 & 0 \\
-Prices outside the fences & 542 & 0 (capped) \\
-Minimum stays above 365 nights & 24 & 0 (capped) \\
-Score averages below 1 & 7 & 0 (set missing) \\
-Missing price & 32{,}049 & 32{,}012 (kept, flagged) \\
-Missing rating & 20{,}694 & 20{,}628 (kept, flagged) \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\expandafter\threehead\BA{Measure}{Before}{After}
+\expandafter\threefirst\BA{Rows}{91{,}954}{91{,}775}
+\expandafter\threerow\BA{Attributes}{90}{219}
+\expandafter\threerow\BA{Instances $\times$ attributes}{8{,}275{,}860}{20{,}098{,}725}
+\expandafter\threerow\BA{Empty columns}{15}{0}
+\expandafter\threerow\BA{Duplicate units}{179}{0}
+\expandafter\threerow\BA{Prices stored as text}{59{,}905}{0}
+\expandafter\threerow\BA{Prices outside the fences}{542}{0 (capped)}
+\expandafter\threerow\BA{Minimum stays above 365 nights}{24}{0 (capped)}
+\expandafter\threerow\BA{Score averages below 1}{7}{0 (set missing)}
+\expandafter\threerow\BA{Missing price}{32{,}049}{32{,}012 (kept, flagged)}
+\expandafter\threelast\BA{Missing rating}{20{,}694}{20{,}628 (kept, flagged)}
+\end{flowtable}
 
 We lost 179 rows (duplicate units) and 22 columns (15 empty, 7 redundant), and imputed nothing.
 We gained a numeric price and bathroom count, a flag for every structural gap and 219
@@ -300,7 +285,7 @@ confirmation split only. Every listing's side is saved in
 \end{figure}
 
 \minihead{Basic questions (quick answers from the exploration split)}
-\begin{enumerate}[label=\arabic*.]
+\begin{enumerate}[label=\arabic*., beginpenalty=10000]
   \item Which boroughs are the most expensive? (Westminster, City of London, Kensington and
   Chelsea: median entire home \pounds295--\pounds304 a night)
   \item Do entire homes cost more than private rooms? (median \pounds224 against \pounds80)
@@ -308,8 +293,7 @@ confirmation split only. Every listing's side is saved in
   \item Do listings with more reviews rate higher? (barely: Spearman $\rho=0.01$)
 \end{enumerate}
 
-\par\smallskip\noindent\begin{minipage}{\linewidth}
-\textbf{Our problem statements}\par\smallskip
+\minihead{Our problem statements}
 \noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
 \textbf{P1 (primary).} Among comparable entire homes (same borough and number of bedrooms), do
 listings run by hosts with 10 or more London listings get different guest ratings from
@@ -320,8 +304,6 @@ listings run by single-listing hosts?
 superlatives get a different accuracy score (the guests' rating of whether the place matched
 its page) from plainly described ones?
 \end{minipage}}
-\end{minipage}
-
 
 \field{How they are novel:}{the basic questions read one column of a listing against another.
 Ours depend on who runs the listing, a portfolio size that no row records directly (we recount
@@ -352,17 +334,14 @@ before any test ran.}
 \subsection*{Test 1 (P1): does a comparable large-host listing rate differently?}
 
 \tpart{a}{Hypotheses, written before running the test}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-$H_0$ & $\beta=0$ \\
-$H_1$ & $\beta\neq0$ \\
-Significance level & $\alpha=0.05$ (family-wise, Holm) \\
-Side & two-sided \\
-Test & t-test on the within-stratum gap with host-clustered standard errors \\
-Smallest difference that matters & 0.10 star \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{$H_0$}{$\beta=0$}
+\kvrow{$H_1$}{$\beta\neq0$}
+\kvrow{Significance level}{$\alpha=0.05$ (family-wise, Holm)}
+\kvrow{Side}{two-sided}
+\kvrow{Test}{t-test on the within-stratum gap with host-clustered standard errors}
+\kvlast{Smallest difference that matters}{0.10 star}
+\end{flowtable}
 
 $\beta$: gap in mean overall rating, $L$ minus $S$, within borough-by-bedroom strata.
 Two-sided, because professional operators could plausibly rate higher (consistent service) as
@@ -376,35 +355,23 @@ compare within strata (one intercept per stratum). And a large host's ratings sh
 operator, so they are not independent: we use host-clustered (CR1) standard errors and $t$ with
 $G-1$ degrees of freedom, $G$ being the number of hosts.
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
-\toprule
-\textbf{Also considered} & \textbf{Why we did not use it} \\
-\midrule
-Welch t-test & ignores strata and clustering; gives $-0.154$ ($t=-39.1$, 9{,}512 d.f.) with a
-standard error a third of the clustered one (0.0039 against 0.0118) \\
-Pooled t-test & assumes equal spreads, which Brown--Forsythe rejects (SD 0.239 against 0.182,
-$F=416.9$, $p<0.001$) \\
-Mann--Whitney U & tests a shift in ranks, not stars, and ties at 5.0 are common; agrees in
-direction: $P(L>S)=0.29$, $p<0.001$ \\
-Stratified permutation & assumes no distribution and gives the same answer ($-0.149$,
-$p=0.0001$, the smallest possible with 10{,}000 permutations), but treats listings in a stratum
-as exchangeable, ignoring the host clusters \\
-z-test, paired t-test & $\sigma$ unknown; nothing to pair \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\althead
+\altfirst{Welch t-test}{ignores strata and clustering; gives $-0.154$ ($t=-39.1$, 9{,}512 d.f.) with a standard error a third of the clustered one (0.0039 against 0.0118)}
+\altrow{Pooled t-test}{assumes equal spreads, which Brown--Forsythe rejects (SD 0.239 against 0.182, $F=416.9$, $p<0.001$)}
+\altrow{Mann--Whitney U}{tests a shift in ranks, not stars, and ties at 5.0 are common; agrees in direction: $P(L>S)=0.29$, $p<0.001$}
+\altrow{Stratified permutation}{assumes no distribution and gives the same answer ($-0.149$, $p=0.0001$, the smallest possible with 10{,}000 permutations), but treats listings in a stratum as exchangeable, ignoring the host clusters}
+\altlast{z-test, paired t-test}{$\sigma$ unknown; nothing to pair}
+\end{flowtable}
 
 \tpart{c}{Result}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-Estimate & $-0.145$ star (raw means 4.66 for $L$, 4.81 for $S$) \\
-95\% confidence interval & $-0.168$ to $-0.122$ \\
-Test statistic (d.f.) & $t=-12.34$ (7{,}673) \\
-p-value & $1.1\times10^{-34}$ (Holm: $2.3\times10^{-34}$) \\
-Decision & reject $H_0$ \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{Estimate}{$-0.145$ star (raw means 4.66 for $L$, 4.81 for $S$)}
+\kvrow{95\% confidence interval}{$-0.168$ to $-0.122$}
+\kvrow{Test statistic (d.f.)}{$t=-12.34$ (7{,}673)}
+\kvrow{p-value}{$1.1\times10^{-34}$ (Holm: $2.3\times10^{-34}$)}
+\kvlast{Decision}{reject $H_0$}
+\end{flowtable}
 
 Comparable large-host homes rate 0.145 star lower. The whole interval lies beyond $-0.10$ star,
 so the gap matters by our standard. It also survives a conservative 476 degrees of freedom (one
@@ -414,17 +381,14 @@ per large host, $p\approx10^{-30}$).
 \subsection*{Test 2 (P1): do large-host listings miss the Superhost bar more often?}
 
 \tpart{a}{Hypotheses, written before running the test}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-$H_0$ & $\theta=1$ \\
-$H_1$ & $\theta\neq1$ \\
-Significance level & $\alpha=0.05$ (family-wise, Holm) \\
-Side & two-sided \\
-Test & Cochran--Mantel--Haenszel (CMH) \\
-Smallest difference that matters & odds ratio outside 0.80--1.25 \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{$H_0$}{$\theta=1$}
+\kvrow{$H_1$}{$\theta\neq1$}
+\kvrow{Significance level}{$\alpha=0.05$ (family-wise, Holm)}
+\kvrow{Side}{two-sided}
+\kvrow{Test}{Cochran--Mantel--Haenszel (CMH)}
+\kvlast{Smallest difference that matters}{odds ratio outside 0.80--1.25}
+\end{flowtable}
 
 $\theta$: common odds ratio, across strata, of a rating below 4.8 for $L$ against $S$. 4.8 is
 the rating Airbnb requires for Superhost status; at the exploration single-host rate of 33.8\%
@@ -434,34 +398,22 @@ below it, an odds ratio of 1.25 means one more listing in twenty falls short.
 A 0/1 outcome compared between two groups across 96 strata calls for the CMH test, which pools
 the strata's $2\times2$ tables without fitting a model.
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
-\toprule
-\textbf{Also considered} & \textbf{Why we did not use it} \\
-\midrule
-Pooled $\chi^2$, two-proportion z-test & ignore the strata; give $\chi^2=1{,}162$ ($z=34.1$,
-$z^2=\chi^2$) and an odds ratio of 3.59, inflated by the borough mix \\
-Fisher's exact test & meant for small counts; with 12{,}443 listings the $\chi^2$ approximation
-is accurate \\
-Logistic regression with stratum terms & asks the same question through a model; CMH needs
-none \\
-Breslow--Day (assumption check) & rejects a common odds ratio ($\chi^2=223.4$, 95 d.f.), so the
-estimate is an average over strata; with one listing per host it does not reject ($p=0.20$) and
-the odds ratio is 3.06 (2.50 to 3.73) \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\althead
+\altfirst{Pooled $\chi^2$, two-proportion z-test}{ignore the strata; give $\chi^2=1{,}162$ ($z=34.1$, $z^2=\chi^2$) and an odds ratio of 3.59, inflated by the borough mix}
+\altrow{Fisher's exact test}{meant for small counts; with 12{,}443 listings the $\chi^2$ approximation is accurate}
+\altrow{Logistic regression with stratum terms}{asks the same question through a model; CMH needs none}
+\altlast{Breslow--Day (assumption check)}{rejects a common odds ratio ($\chi^2=223.4$, 95 d.f.), so the estimate is an average over strata; with one listing per host it does not reject ($p=0.20$) and the odds ratio is 3.06 (2.50 to 3.73)}
+\end{flowtable}
 
 \tpart{c}{Result}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-Estimate & odds ratio 3.22 (65.5\% of $L$ and 34.6\% of $S$ below 4.8) \\
-95\% confidence interval & 2.97 to 3.49 \\
-Test statistic (d.f.) & $\chi^2_{\mathrm{MH}}=838.2$ (1) \\
-p-value & $2.7\times10^{-184}$ (Holm: $1.1\times10^{-183}$) \\
-Decision & reject $H_0$ \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{Estimate}{odds ratio 3.22 (65.5\% of $L$ and 34.6\% of $S$ below 4.8)}
+\kvrow{95\% confidence interval}{2.97 to 3.49}
+\kvrow{Test statistic (d.f.)}{$\chi^2_{\mathrm{MH}}=838.2$ (1)}
+\kvrow{p-value}{$2.7\times10^{-184}$ (Holm: $1.1\times10^{-183}$)}
+\kvlast{Decision}{reject $H_0$}
+\end{flowtable}
 
 Within the same borough and bedroom band, a large-host listing has 3.2 times the odds of falling
 below the Superhost bar. The whole interval lies above 1.25, so the difference matters.
@@ -470,17 +422,14 @@ below the Superhost bar. The whole interval lies above 1.25, so the difference m
 \subsection*{Test 3 (P1): with every host counted once, do large hosts rate lower?}
 
 \tpart{a}{Hypotheses, written before running the test}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-$H_0$ & $\mu_L-\mu_S=0$ \\
-$H_1$ & $\mu_L-\mu_S\neq0$ \\
-Significance level & $\alpha=0.05$ (family-wise, Holm) \\
-Side & two-sided \\
-Test & Welch t-test \\
-Smallest difference that matters & 0.10 star \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{$H_0$}{$\mu_L-\mu_S=0$}
+\kvrow{$H_1$}{$\mu_L-\mu_S\neq0$}
+\kvrow{Significance level}{$\alpha=0.05$ (family-wise, Holm)}
+\kvrow{Side}{two-sided}
+\kvrow{Test}{Welch t-test}
+\kvlast{Smallest difference that matters}{0.10 star}
+\end{flowtable}
 
 $\mu_L$, $\mu_S$: mean rating of a host's established entire homes, averaged per host (477
 large hosts, 7{,}197 single hosts). Averaging removes the dependence within a host by design
@@ -489,52 +438,38 @@ rather than by a model.
 \tpart{b}{Other tests we considered}
 Two independent groups of hosts, very unequal in size and spread: Welch's t-test.
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
-\toprule
-\textbf{Also considered} & \textbf{Why we did not use it} \\
-\midrule
-Pooled t-test & Brown--Forsythe rejects equal variances ($F=9.58$, $p=0.002$); run anyway, it
-gives $t=-18.96$ and the same decision \\
-Mann--Whitney U & tests ranks, not stars; agrees: $P(L>S)=0.24$, $p<0.001$ \\
-Permutation test & also valid; $p=0.0002$, the smallest two-sided value 10{,}000 resamples can
-give \\
-Stratified tests & a host's listings span several boroughs, so host means cannot be stratified;
-Tests 1 and 2 cover that \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\althead
+\altfirst{Pooled t-test}{Brown--Forsythe rejects equal variances ($F=9.58$, $p=0.002$); run anyway, it gives $t=-18.96$ and the same decision}
+\altrow{Mann--Whitney U}{tests ranks, not stars; agrees: $P(L>S)=0.24$, $p<0.001$}
+\altrow{Permutation test}{also valid; $p=0.0002$, the smallest two-sided value 10{,}000 resamples can give}
+\altlast{Stratified tests}{a host's listings span several boroughs, so host means cannot be stratified; Tests 1 and 2 cover that}
+\end{flowtable}
 
 \tpart{c}{Result}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-Estimate & $-0.164$ star (host means 4.65 for $L$, 4.81 for $S$) \\
-95\% confidence interval & $-0.182$ to $-0.146$ \\
-Test statistic (d.f.) & $t=-17.85$ (532.4) \\
-p-value & $3.4\times10^{-56}$ (Holm: $1.0\times10^{-55}$) \\
-Decision & reject $H_0$ \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{Estimate}{$-0.164$ star (host means 4.65 for $L$, 4.81 for $S$)}
+\kvrow{95\% confidence interval}{$-0.182$ to $-0.146$}
+\kvrow{Test statistic (d.f.)}{$t=-17.85$ (532.4)}
+\kvrow{p-value}{$3.4\times10^{-56}$ (Holm: $1.0\times10^{-55}$)}
+\kvlast{Decision}{reject $H_0$}
+\end{flowtable}
 
 The typical large operator rates 0.16 star below the typical single host. The interval lies
 beyond $-0.10$ star, so this gap matters too.
 
 %------------------------------------------------------------ Test 4
-\needspace{24\baselineskip}  % keep the heading with its hypotheses table
 \subsection*{Test 4 (P2): do hyped descriptions change the accuracy score?}
 
 \tpart{a}{Hypotheses, written before running the test}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-$H_0$ & $\delta=0$ \\
-$H_1$ & $\delta\neq0$ \\
-Significance level & $\alpha=0.05$ (family-wise, Holm) \\
-Side & two-sided \\
-Test & stratified permutation test (10{,}000 permutations) \\
-Smallest difference that matters & 0.10 star \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{$H_0$}{$\delta=0$}
+\kvrow{$H_1$}{$\delta\neq0$}
+\kvrow{Significance level}{$\alpha=0.05$ (family-wise, Holm)}
+\kvrow{Side}{two-sided}
+\kvrow{Test}{stratified permutation test (10{,}000 permutations)}
+\kvlast{Smallest difference that matters}{0.10 star}
+\end{flowtable}
 
 $\delta$: gap in mean accuracy score, hyped minus plain, averaged over borough-by-host-class
 strata. Hyped means 2 or more words from a fixed list of 34 superlatives (``perfect'',
@@ -547,30 +482,22 @@ Accuracy averages are bounded and bunched near 5 (median 4.83), so a permutation
 assuming normality; permuting labels within strata holds borough and operator type fixed; and
 one listing per host stops big operators' copied descriptions from counting many times.
 
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
-\toprule
-\textbf{Also considered} & \textbf{Why we did not use it} \\
-\midrule
-Welch t-test & ignores the strata; $+0.005$, $p=0.28$ \\
-Mann--Whitney U & ranks with many ties, and ignores the strata; $p=0.25$ \\
-Unstratified permutation & same as ours without the strata; $p=0.28$ \\
-Spearman correlation & uses every hype count (a dose--response check), but no strata;
-$\rho=0.017$, $p=0.08$ ($n=10{,}513$) \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\althead
+\altfirst{Welch t-test}{ignores the strata; $+0.005$, $p=0.28$}
+\altrow{Mann--Whitney U}{ranks with many ties, and ignores the strata; $p=0.25$}
+\altrow{Unstratified permutation}{same as ours without the strata; $p=0.28$}
+\altlast{Spearman correlation}{uses every hype count (a dose--response check), but no strata; $\rho=0.017$, $p=0.08$ ($n=10{,}513$)}
+\end{flowtable}
 
 \tpart{c}{Result}
-{\small
-\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
-\toprule
-Estimate & $+0.008$ star (4.825 hyped, 4.821 plain) \\
-95\% confidence interval & $+0.0004$ to $+0.016$ (stratified bootstrap, 5{,}000 resamples) \\
-Test statistic (d.f.) & the stratified gap itself; d.f. not applicable (permutation test) \\
-p-value & 0.044 (Monte Carlo SE 0.002; Holm: 0.044) \\
-Decision & reject $H_0$ \\
-\bottomrule
-\end{tabularx}}
+\begin{flowtable}
+\kvfirst{Estimate}{$+0.008$ star (4.825 hyped, 4.821 plain)}
+\kvrow{95\% confidence interval}{$+0.0004$ to $+0.016$ (stratified bootstrap, 5{,}000 resamples)}
+\kvrow{Test statistic (d.f.)}{the stratified gap itself; d.f. not applicable (permutation test)}
+\kvrow{p-value}{0.044 (Monte Carlo SE 0.002; Holm: 0.044)}
+\kvlast{Decision}{reject $H_0$}
+\end{flowtable}
 
 Hyped listings score very slightly higher on accuracy, the opposite of the ``overselling
 backfires'' idea, and only once borough and host class are held fixed: the unstratified tests
@@ -590,6 +517,12 @@ T4 & $+0.008$ star ($+0.0004$, $+0.016$) & 0.044 & reject; too small to matter \
 \bottomrule
 \end{tabularx}}
 
+\begin{figure}[!ht]
+  \figfile{fig5_test_summary.pdf}{5.8cm}
+  \caption{The three P1 estimates lie well outside their ``too small to matter'' bands (shaded),
+  while the P2 gap sits inside its band.}
+\end{figure}
+
 For P1, three designs that handle the data's two problems in different ways (strata for the
 borough mix, clusters or host-level units for repeated operators) agree: a large-host home rates
 about 0.15 star lower than a comparable single-host home and has about three times the odds of
@@ -598,7 +531,7 @@ missing the Superhost bar. For P2, hype in a description makes no difference a g
 %-----------------------------------------------------------------------
 \section{Limitations}
 
-\begin{itemize}
+\begin{itemize}[beginpenalty=10000]
   \item \textbf{Association, not cause.} Large operators differ from single hosts in more than
   size (property type, pricing, guests, house rules); our strata hold only borough and bedrooms
   fixed.

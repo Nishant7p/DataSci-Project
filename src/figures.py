@@ -109,6 +109,50 @@ def large_share_by_borough(shares: pd.Series, out_dir: Path) -> list[Path]:
     return _save(fig, out_dir, "fig3_large_share_by_borough")
 
 
+def test_summary(star_rows: list[tuple], ratio_row: tuple, out_dir: Path,
+                 star_band: float = 0.10, ratio_band: float = 1.25) -> list[Path]:
+    """Estimates with 95% CIs for the four tests, against the pre-registered 'matters' bands.
+
+    Gaps in stars and the odds ratio live on different scales, so they get separate panels
+    (one axis each) instead of a shared or dual axis.
+    """
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(COL_W, 2.25),
+                                   gridspec_kw={"height_ratios": [3, 1.35], "hspace": 0.95})
+    band_fill = "#f0efec"
+    y = np.arange(len(star_rows))[::-1]
+    ax1.axvspan(-star_band, star_band, color=band_fill, zorder=0)
+    ax1.axvline(0, color=AXIS, linewidth=0.8, zorder=1)
+    for yi, (label, est, lo, hi) in zip(y, star_rows):
+        ax1.hlines(yi, lo, hi, color=SERIES_1, linewidth=1.8, zorder=2)
+        ax1.plot(est, yi, "o", color=SERIES_1, markersize=4.6, markeredgecolor="white",
+                 markeredgewidth=1.0, zorder=3)
+        ax1.text(hi + 0.012, yi, f"{est:+.3f}", va="center", ha="left", color=INK, fontsize=6.3)
+    ax1.set_yticks(y, [r[0] for r in star_rows])
+    ax1.set_xlim(-0.24, 0.16)
+    ax1.set_ylim(-0.6, len(star_rows) - 0.4)
+    ax1.grid(axis="y", visible=False)
+    ax1.tick_params(axis="y", length=0)
+    ax1.set_xlabel("Gap in stars, with 95% interval (shaded: within 0.10 star, too small to matter)")
+
+    label, est, lo, hi = ratio_row
+    ax2.axvspan(1 / ratio_band, ratio_band, color=band_fill, zorder=0)
+    ax2.axvline(1, color=AXIS, linewidth=0.8, zorder=1)
+    ax2.hlines(0, lo, hi, color=SERIES_1, linewidth=1.8, zorder=2)
+    ax2.plot(est, 0, "o", color=SERIES_1, markersize=4.6, markeredgecolor="white",
+             markeredgewidth=1.0, zorder=3)
+    ax2.text(hi * 1.04, 0, f"{est:.2f}", va="center", ha="left", color=INK, fontsize=6.3)
+    ax2.set_xscale("log")
+    ax2.set_xlim(0.6, 5.0)
+    ax2.set_xticks([0.8, 1, 1.25, 2, 3, 4], ["0.8", "1", "1.25", "2", "3", "4"])
+    ax2.minorticks_off()
+    ax2.set_yticks([0], [label])
+    ax2.set_ylim(-0.6, 0.6)
+    ax2.grid(axis="y", visible=False)
+    ax2.tick_params(axis="y", length=0)
+    ax2.set_xlabel("Odds ratio, log scale (shaded: 0.80 to 1.25, too small to matter)")
+    return _save(fig, out_dir, "fig5_test_summary")
+
+
 def accuracy_by_hype(data: pd.DataFrame, out_dir: Path) -> list[Path]:
     """Mean accuracy score with 95% t-interval for each hype-word count bucket."""
     labels = list(data["bucket"].cat.categories)
