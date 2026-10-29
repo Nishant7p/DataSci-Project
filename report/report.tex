@@ -1,6 +1,6 @@
 %=======================================================================
 %  CSE558 Data Science - Midterm Project Report
-%  Monsoon 2026, IIIT-Delhi.  Built on the course template (template_original.tex).
+%  Monsoon 2026, IIIT-Delhi.  Built on the course LaTeX template.
 %  Every number below comes from notebooks/midterm_analysis.ipynb
 %  (outputs/tables/*.json, *.csv). Compile with pdfLaTeX twice (Overleaf
 %  default) or `tectonic report.tex`.
@@ -146,15 +146,15 @@ Code & \href{https://github.com/Nishant7p/DataSci-Project}{github.com/Nishant7p/
 
 \vspace{2pt}
 {\small
-\begin{tabularx}{\linewidth}{@{}L{0.5cm} L{3.4cm} L{2.3cm} L{4.8cm} Y@{}}
+\begin{tabularx}{\linewidth}{@{}L{0.5cm} L{3.4cm} L{2.0cm} L{4.3cm} Y@{}}
 \toprule
 \textbf{\#} & \textbf{Name} & \textbf{Roll no.} & \textbf{Institute email} & \textbf{Contribution} \\
 \midrule
-1 & Nischay Soni & 2023353 & nischay23353@iiitd.ac.in & Equal contribution (all sections) \\
-2 & Nishant Tomer & 2023355 & nishant23355@iiitd.ac.in & Equal contribution (all sections) \\
-3 & Sarthak & 2023490 & sarthak23490@iiitd.ac.in & Equal contribution (all sections) \\
-4 & Syed Musa Kazim & 2023543 & syed23543@iiitd.ac.in & Equal contribution (all sections) \\
-5 & Yash & 2023605 & yash23605@iiitd.ac.in & Equal contribution (all sections) \\
+1 & Nischay Soni & 2023353 & nischay23353@iiitd.ac.in & Data sourcing, size check, dictionary (1) \\
+2 & Nishant Tomer & 2023355 & nishant23355@iiitd.ac.in & Cleaning pipeline, before and after (2, 3) \\
+3 & Sarthak & 2023490 & sarthak23490@iiitd.ac.in & Split, EDA figures, problem statements (4) \\
+4 & Syed Musa Kazim & 2023543 & syed23543@iiitd.ac.in & Pre-registration, Tests 1 and 2 (5) \\
+5 & Yash & 2023605 & yash23605@iiitd.ac.in & Tests 3 and 4, limitations, README (5, 6) \\
 \bottomrule
 \end{tabularx}}
 \vspace{12pt}
@@ -164,9 +164,8 @@ Code & \href{https://github.com/Nishant7p/DataSci-Project}{github.com/Nishant7p/
 \section{Dataset}
 
 \field{Source:}{Inside Airbnb (insideairbnb.com), London snapshot compiled on 17 September 2026,
-detailed listings file \code{listings.csv.gz}, downloaded on 26 October 2026 from the original
-site rather than from one of the older Kaggle re-uploads; the notebook checks its SHA-256.
-Licence CC BY 4.0. One row is one Airbnb listing.}
+detailed listings file \code{listings.csv.gz}, downloaded on 26 October 2026. Licence CC BY 4.0.
+One row is one Airbnb listing.}
 
 \field{What is raw about it:}{prices are text (\code{"\$267.50"}) although Airbnb's own quotes give
 the currency as GBP; bathrooms exist only as text in 47 forms (\code{"1.5 shared baths"});

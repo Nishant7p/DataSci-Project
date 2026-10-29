@@ -149,8 +149,7 @@ The raw file needed real work. Every step, and the reason for it, is logged in
 
 The raw file is not committed. The notebook downloads it and checks the SHA-256 above. Inside
 Airbnb keeps about a year of snapshots online, after which this one can be requested from their
-archive. Links to every dataset we compared before choosing this one are in
-[`docs/dataset_links.pdf`](docs/dataset_links.pdf).
+archive.
 
 ## Reproduce the results
 
@@ -186,24 +185,22 @@ src/
   dictionary.py                    data dictionary specification
   figures.py                       all figures
 tests/                             unit tests and report-consistency checks (pytest)
-docs/                              data dictionary, pre-registration, requirement
-                                   checklist, dataset links
+docs/                              data dictionary and pre-registered hypotheses
 outputs/
   tables/                          every number used in the report (JSON, CSV)
   figures/                         Figures 1 to 5 (PDF and PNG)
-report/                            report.tex, report.pdf and the figures it uses;
-                                   template_original.tex is the untouched course template
+report/                            report.tex, report.pdf and the figures it uses
 ```
 
 ## Team
 
-| Name | Roll no. |
-|---|---|
-| Nischay Soni | 2023353 |
-| Nishant Tomer | 2023355 |
-| Sarthak | 2023490 |
-| Syed Musa Kazim | 2023543 |
-| Yash | 2023605 |
+| Name | Roll no. | Worked on |
+|---|---|---|
+| Nischay Soni | 2023353 | data sourcing, size check, data dictionary |
+| Nishant Tomer | 2023355 | cleaning pipeline, before-and-after audit |
+| Sarthak | 2023490 | exploration split, EDA figures, problem statements |
+| Syed Musa Kazim | 2023543 | pre-registration, Tests 1 and 2 |
+| Yash | 2023605 | Tests 3 and 4, limitations, README |
 
 Data from [Inside Airbnb](https://insideairbnb.com), used under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
