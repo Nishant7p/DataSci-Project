@@ -194,6 +194,8 @@ report/                            report.tex, report.pdf and the figures it use
 
 ## Team
 
+Group **Setitirum**
+
 | Name | Roll no. | Worked on |
 |---|---|---|
 | Nischay Soni | 2023353 | data sourcing, size check, data dictionary |

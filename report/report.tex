@@ -4,8 +4,6 @@
 %  Every number below comes from notebooks/midterm_analysis.ipynb
 %  (outputs/tables/*.json, *.csv). Compile with pdfLaTeX twice (Overleaf
 %  default) or `tectonic report.tex`.
-%
-%  >>> FILL IN: the group name (red placeholder in the header table). <<<
 %=======================================================================
 \documentclass[10pt,a4paper,twocolumn]{article}
 
@@ -94,8 +92,6 @@
     {\includegraphics[width=\linewidth,height=#2,keepaspectratio]{#1}}%
     {\fbox{\parbox[c][#2][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}%
       {\centering\small\itshape\color{hintgrey}Your plot: \detokenize{#1}}}}}
-% Details only the group can supply (shown in red until replaced).
-\newcommand{\fillin}[1]{\textcolor{red}{[#1]}}
 
 %------------------------------------------------ tables that break between rows
 % A tabularx box cannot split, so a long table that does not fit leaves a gap at the foot of
@@ -138,7 +134,7 @@
 {\small
 \begin{tabularx}{\linewidth}{@{}K{2.4cm} Y@{}}
 \toprule
-Group name & \fillin{group name} \\
+Group name & Setitirum \\
 Dataset & insideairbnb.com/get-the-data: London, snapshot of 17 September 2026, file \code{listings.csv.gz} (CC BY 4.0) \\
 Code & \href{https://github.com/Nishant7p/DataSci-Project}{github.com/Nishant7p/DataSci-Project} (notebook \code{notebooks/midterm\_analysis.ipynb}, source in \code{src/}, README) \\
 \bottomrule
