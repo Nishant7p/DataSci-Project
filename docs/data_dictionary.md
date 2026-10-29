@@ -1,0 +1,107 @@
+# Data dictionary: Inside Airbnb London, 17 September 2026
+
+Computed from the raw file by `src/dictionary.py`. Type follows the course scheme (nominal, discrete, continuous); kind gives the storage form.
+
+| attribute | origin | type | kind | unit | range | missing (%) | meaning |
+|---|---|---|---|---|---|---|---|
+| `id` | raw | nominal | identifier | - | 91,954 unique | 0 (0.0) | Airbnb listing ID |
+| `listing_url` | raw | nominal | URL | - | 91,954 unique | 0 (0.0) | listing page on airbnb.com |
+| `scrape_id` | raw | nominal | identifier | - | 1 unique | 0 (0.0) | Inside Airbnb scrape run (constant) |
+| `last_scraped` | raw | discrete | date | day | 2026-09-18 to 2026-09-23 | 0 (0.0) | day the listing was scraped |
+| `source` | raw | nominal | category | - | 1 levels: previous scrape | 59,643 (64.9) | 'previous scrape' = carried over from an earlier scrape; blank = found by this city scrape |
+| `name` | raw | nominal | free text | - | 89,060 distinct; 1 to 254 characters | 0 (0.0) | listing title written by the host |
+| `description` | raw | nominal | free text (HTML) | - | 80,818 distinct; 1 to 1000 characters | 701 (0.8) | listing description written by the host |
+| `neighborhood_overview` | raw | nominal | free text | - | - | 91,954 (100.0) | empty in this snapshot |
+| `picture_url` | raw | nominal | URL | - | 90,177 unique | 5 (0.0) | cover photo |
+| `host_id` | raw | nominal | identifier | - | 51,348 unique | 0 (0.0) | Airbnb host ID |
+| `host_url` | raw | nominal | URL | - | 51,348 unique | 0 (0.0) | host page |
+| `host_profile_id` | raw | nominal | identifier | - | 51,348 unique | 0 (0.0) | host profile ID |
+| `host_profile_url` | raw | nominal | URL | - | 51,348 unique | 0 (0.0) | host profile page |
+| `host_name` | raw | nominal | free text | - | 15,747 distinct; 1 to 47 characters | 0 (0.0) | host first name (personal data, never used) |
+| `host_since` | raw | discrete | date | day | - | 91,954 (100.0) | empty in this snapshot |
+| `hosts_time_as_user_years` | raw | discrete | count | years | 0 to 18 | 1 (0.0) | whole years since the host joined Airbnb |
+| `hosts_time_as_user_months` | raw | discrete | count | months | 0 to 11 | 1 (0.0) | months beyond the whole years (0-11) |
+| `hosts_time_as_host_years` | raw | discrete | count | years | 0 to 15 | 1 (0.0) | whole years the host has hosted |
+| `hosts_time_as_host_months` | raw | discrete | count | months | 0 to 11 | 1 (0.0) | months beyond the whole years (0-11) |
+| `host_location` | raw | nominal | free text | - | 1,692 distinct; 5 to 56 characters | 22,885 (24.9) | host's stated home location |
+| `host_about` | raw | nominal | free text | - | 23,403 distinct; 1 to 11215 characters | 42,695 (46.4) | host biography |
+| `host_response_time` | raw | nominal | category | - | - | 91,954 (100.0) | empty in this snapshot |
+| `host_response_rate` | raw | continuous | percentage | % | - | 91,954 (100.0) | empty in this snapshot |
+| `host_acceptance_rate` | raw | continuous | percentage | % | - | 91,954 (100.0) | empty in this snapshot |
+| `host_is_superhost` | raw | nominal | binary (t/f) | - | f: 74,150, t: 17,804 | 0 (0.0) | host holds Airbnb's Superhost badge |
+| `host_thumbnail_url` | raw | nominal | URL | - | - | 91,954 (100.0) | empty in this snapshot |
+| `host_picture_url` | raw | nominal | URL | - | 48,667 unique | 0 (0.0) | host photo |
+| `host_neighbourhood` | raw | nominal | category | - | - | 91,954 (100.0) | empty in this snapshot |
+| `host_listings_count` | raw | discrete | count | listings | 0 to 5,777 | 0 (0.0) | host's listings across all of Airbnb (all cities) |
+| `host_total_listings_count` | raw | discrete | count | listings | - | 91,954 (100.0) | empty in this snapshot |
+| `host_verifications` | raw | nominal | list | - | - | 91,954 (100.0) | empty in this snapshot |
+| `host_has_profile_pic` | raw | nominal | binary (t/f) | - | t: 87,422, f: 4,532 | 0 (0.0) | host has a profile photo |
+| `host_identity_verified` | raw | nominal | binary (t/f) | - | t: 90,444, f: 1,510 | 0 (0.0) | host identity verified by Airbnb |
+| `neighbourhood` | raw | nominal | category | - | - | 91,954 (100.0) | empty in this snapshot |
+| `neighbourhood_cleansed` | raw | nominal | category | - | 33 levels | 0 (0.0) | London borough, geocoded by Inside Airbnb |
+| `neighbourhood_group_cleansed` | raw | nominal | category | - | - | 91,954 (100.0) | empty in this snapshot |
+| `latitude` | raw | continuous | coordinate | degrees | 51.3 to 51.68 | 0 (0.0) | latitude (Airbnb blurs exact locations) |
+| `longitude` | raw | continuous | coordinate | degrees | -0.4979 to 0.3093 | 0 (0.0) | longitude |
+| `property_type` | raw | nominal | category | - | 89 levels | 0 (0.0) | host-chosen property type |
+| `room_type` | raw | nominal | category | - | 4 levels: Entire home/apt, Private room, Hotel room, Shared room | 0 (0.0) | entire home/apt, private room, shared room or hotel room |
+| `accommodates` | raw | discrete | count | guests | 1 to 16 | 0 (0.0) | maximum number of guests |
+| `bathrooms` | raw | continuous | count | bathrooms | - | 91,954 (100.0) | empty in this snapshot |
+| `bathrooms_text` | raw | nominal | free text | - | 47 distinct; 6 to 17 characters | 108 (0.1) | bathrooms as text, e.g. '1.5 shared baths' (parsed) |
+| `bedrooms` | raw | discrete | count | rooms | 0 to 30 | 45 (0.0) | number of bedrooms (0 = studio) |
+| `beds` | raw | discrete | count | beds | 0 to 50 | 1,990 (2.2) | number of beds |
+| `amenities` | raw | nominal | list (JSON) | - | 0 to 99 items per row | 0 (0.0) | amenities the host ticked |
+| `price` | raw | continuous | money as text | GBP per night | 12,401 distinct; 6 to 10 characters | 32,049 (34.9) | nightly price; stored as '$267.50' although the currency is GBP |
+| `price_quote_checkin_date` | raw | discrete | date | day | 2026-09-18 to 2027-09-20 | 29,225 (31.8) | check-in date of the price quote Inside Airbnb requested |
+| `price_quote_checkout_date` | raw | discrete | date | day | 2026-09-19 to 2027-09-23 | 29,225 (31.8) | check-out date of that quote |
+| `price_quote_total_price` | raw | continuous | money | GBP | 10 to 9.147e+05 | 32,193 (35.0) | total price of the quoted stay |
+| `price_quote_price_per_night` | raw | continuous | money | GBP per night | 10 to 7.5e+04 | 32,193 (35.0) | quoted nightly price (repeats price) |
+| `price_quote_raw` | raw | nominal | JSON text | - | 51,145 distinct; 455 to 1122 characters | 29,225 (31.8) | raw quote returned by Airbnb (currency GBP) |
+| `minimum_nights` | raw | discrete | count | nights | 1 to 1,125 | 309 (0.3) | current minimum stay |
+| `maximum_nights` | raw | discrete | count | nights | 1 to 2.147e+09 | 309 (0.3) | current maximum stay |
+| `minimum_minimum_nights` | raw | discrete | count | nights | 1 to 1,125 | 309 (0.3) | smallest minimum stay in the next 365 days |
+| `maximum_minimum_nights` | raw | discrete | count | nights | 1 to 1,125 | 309 (0.3) | largest minimum stay in the next 365 days |
+| `minimum_maximum_nights` | raw | discrete | count | nights | 1 to 2.147e+09 | 309 (0.3) | smallest maximum stay in the next 365 days |
+| `maximum_maximum_nights` | raw | discrete | count | nights | 1 to 2.147e+09 | 309 (0.3) | largest maximum stay in the next 365 days |
+| `minimum_nights_avg_ntm` | raw | continuous | average | nights | 1 to 1,125 | 0 (0.0) | average minimum stay over the next 12 months |
+| `maximum_nights_avg_ntm` | raw | continuous | average | nights | 1 to 2.147e+09 | 0 (0.0) | average maximum stay over the next 12 months |
+| `calendar_updated` | raw | nominal | category | - | - | 91,954 (100.0) | empty in this snapshot |
+| `has_availability` | raw | nominal | binary (t/f) | - | t: 90,828, f: 365 | 761 (0.8) | listing has any availability |
+| `availability_30` | raw | discrete | count | days | 0 to 30 | 0 (0.0) | days available in the next 30 |
+| `availability_60` | raw | discrete | count | days | 0 to 60 | 0 (0.0) | days available in the next 60 |
+| `availability_90` | raw | discrete | count | days | 0 to 90 | 0 (0.0) | days available in the next 90 |
+| `availability_365` | raw | discrete | count | days | 0 to 365 | 0 (0.0) | days available in the next 365 |
+| `calendar_last_scraped` | raw | discrete | date | day | 2026-09-18 to 2026-09-23 | 0 (0.0) | day the calendar was scraped |
+| `number_of_reviews` | raw | discrete | count | reviews | 0 to 1,959 | 0 (0.0) | total reviews |
+| `number_of_reviews_ltm` | raw | discrete | count | reviews | 0 to 789 | 0 (0.0) | reviews in the last 12 months |
+| `number_of_reviews_l30d` | raw | discrete | count | reviews | 0 to 73 | 0 (0.0) | reviews in the last 30 days |
+| `availability_eoy` | raw | discrete | count | days | 0 to 105 | 0 (0.0) | days available until the end of the year |
+| `number_of_reviews_ly` | raw | discrete | count | reviews | 0 to 505 | 0 (0.0) | reviews in the last year (Inside Airbnb definition) |
+| `estimated_occupancy_l365d` | raw | discrete | count | nights | 0 to 255 | 0 (0.0) | Inside Airbnb's estimate of nights booked in the last 365 days |
+| `estimated_revenue_l365d` | raw | continuous | money | GBP | 0 to 7.177e+05 | 32,049 (34.9) | estimated occupancy times price |
+| `first_review` | raw | discrete | date | day | 2009-12-21 to 2026-09-20 | 20,694 (22.5) | date of the first review |
+| `last_review` | raw | discrete | date | day | 2012-03-26 to 2026-09-22 | 20,694 (22.5) | date of the latest review |
+| `review_scores_rating` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,694 (22.5) | average overall guest rating (P1 response) |
+| `review_scores_accuracy` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,709 (22.5) | average 'did the listing match its page?' score (P2 response) |
+| `review_scores_cleanliness` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,704 (22.5) | average cleanliness score |
+| `review_scores_checkin` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,731 (22.5) | average check-in score |
+| `review_scores_communication` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,715 (22.5) | average communication score |
+| `review_scores_location` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,734 (22.5) | average location score |
+| `review_scores_value` | raw | continuous | average | stars (1-5) | 0 to 5 | 20,734 (22.5) | average value-for-money score |
+| `license` | raw | nominal | free text | - | - | 91,954 (100.0) | empty in this snapshot |
+| `instant_bookable` | raw | nominal | binary (t/f) | - | - | 91,954 (100.0) | empty in this snapshot |
+| `calculated_host_listings_count` | raw | discrete | count | listings | 1 to 501 | 0 (0.0) | host's listings in this London snapshot |
+| `calculated_host_listings_count_entire_homes` | raw | discrete | count | listings | 0 to 500 | 0 (0.0) | of which entire homes |
+| `calculated_host_listings_count_private_rooms` | raw | discrete | count | listings | 0 to 141 | 0 (0.0) | of which private rooms |
+| `calculated_host_listings_count_shared_rooms` | raw | discrete | count | listings | 0 to 25 | 0 (0.0) | of which shared rooms |
+| `reviews_per_month` | raw | continuous | rate | reviews per month | 0.01 to 55.84 | 20,694 (22.5) | reviews divided by months since the first review |
+| `price_gbp` | derived | continuous | money | GBP per night | 10 to 7.5e+04 | 32,012 (34.9) | price parsed to a number |
+| `baths` | derived | continuous | count | bathrooms | 0 to 30 | 108 (0.1) | bathroom count parsed from bathrooms_text (half = 0.5) |
+| `bath_shared` | derived | nominal | binary | - | False: 75,353, True: 16,422 | 0 (0.0) | bathroom is shared |
+| `bath_private` | derived | nominal | binary | - | False: 82,920, True: 8,855 | 0 (0.0) | bathroom is described as private |
+| `from_previous_scrape` | derived | nominal | binary | - | False: 59,506, True: 32,269 | 0 (0.0) | listing carried over from an earlier scrape |
+| `description_words` | derived | discrete | count | words | 0 to 192 | 0 (0.0) | words in the description after removing HTML |
+| `hype_count` | derived | discrete | count | words | 0 to 10 | 0 (0.0) | marketing superlatives in the description (fixed list) |
+| `amenity_count` | derived | discrete | count | amenities | 0 to 99 | 0 (0.0) | number of amenities listed |
+| `host_london_listings` | derived | discrete | count | listings | 1 to 501 | 0 (0.0) | host's London listings after duplicate removal |
+| `host_class` | derived | nominal | category | - | 3 levels: single (1), small (2-9), large (10+) | 0 (0.0) | single (1), small (2-9) or large (10+) London portfolio |
+| `bedroom_band` | derived | nominal | ordinal category | - | 3 levels: 0-1, 2, 3+ | 45 (0.0) | 0-1, 2 or 3+ bedrooms |

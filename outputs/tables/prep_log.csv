@@ -1,0 +1,9 @@
+step,action,touched,reason
+15 columns are 100% empty,dropped,15,"Airbnb stopped exposing these fields (e.g. host_since, license, instant_bookable); nothing to impute from"
+price_quote_* repeat price; scrape metadata constant,dropped,7,price_quote_price_per_night equals price for 99.8% of priced listings
+price stored as text '$267.50',parsed to a number in GBP,59905,format fix; Airbnb's own quotes give the currency as GBP
+bathrooms only as text ('1.5 shared baths'),parsed to count + shared/private flags,91846,47 text levels carry two facts: how many and whether shared
+review score averages below 1,set to missing and flagged,7,"a 1-5 star average cannot be below 1; these are recording errors, not bad listings"
+"minimum_nights up to 1,125",capped at 365 and flagged,24,"1,125 is Airbnb's form maximum, a placeholder for 'long lets only', not a real rule"
+HTML tags in descriptions,stripped,47950,"tags such as <br /> are markup, not words"
+same unit listed twice,"dropped extra copies, kept the one with most reviews",179,"173 same-host copies and 6 cross-account copies; 95 of all copies belong to hosts with 10+ listings, the group P1 studies, so leaving them would count those hosts twice"

@@ -1,0 +1,12 @@
+measure,before,after
+Rows,91954,91775
+Attributes,90,219
+Instances x attributes,8275860,20098725
+Columns with no data,15,0
+Duplicate units,179,0
+Price as text,59905,0
+Prices outside log-IQR fences,542,0
+Minimum nights > 365,24,0
+Review averages below 1,7,0
+"Missing price (kept, flagged)",32049,32012
+"Missing rating (kept, flagged)",20694,20628

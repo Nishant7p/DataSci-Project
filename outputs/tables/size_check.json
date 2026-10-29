@@ -1,0 +1,17 @@
+{
+  "rows": 91775,
+  "encoded_columns": 219,
+  "cells": 20098725,
+  "numeric": 48,
+  "flags": 12,
+  "borough_dummies": 33,
+  "room_dummies": 4,
+  "property_dummies": 22,
+  "amenity_columns": 100,
+  "price_fence_low": 19.25923094189454,
+  "price_fence_high": 1365.5270077680968,
+  "price_below_fence": 26,
+  "price_above_fence": 514,
+  "property_levels_kept": 21,
+  "property_types_raw": 89
+}

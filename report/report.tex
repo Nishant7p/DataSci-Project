@@ -1,0 +1,623 @@
+%=======================================================================
+%  CSE558 Data Science - Midterm Project Report
+%  Monsoon 2026, IIIT-Delhi.  Built on the course template (template_original.tex).
+%  Every number below comes from notebooks/midterm_analysis.ipynb
+%  (outputs/tables/*.json, *.csv). Compile with pdfLaTeX twice (Overleaf
+%  default) or `tectonic report.tex`.
+%
+%  >>> FILL IN: the group name (red placeholder in the header table). <<<
+%=======================================================================
+\documentclass[10pt,a4paper,twocolumn]{article}
+
+%========================= EDIT THIS =========================
+\newcommand{\projecttitle}{Do multi-listing hosts drag ratings down?
+  Evidence from London Airbnb listings}
+\newif\ifshowhints
+\showhintsfalse     % \showhintsfalse hides every grey instruction line
+%=============================================================
+
+%-------------------------------------------- fonts (no need to edit)
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \IfFileExists{carlito.sty}%
+    {\usepackage[sfdefault]{carlito}}%              Calibri look
+    {\usepackage[scaled=0.92]{helvet}\renewcommand{\familydefault}{\sfdefault}}%
+  \usepackage{courier}
+\else
+  \usepackage[no-math]{fontspec}
+  \setmainfont{Carlito}[Extension=.ttf, UprightFont=*-Regular, BoldFont=*-Bold,
+    ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]
+\fi
+
+%----------------------------------------------------------- packages
+\usepackage[margin=18mm,bottom=20mm,columnsep=7mm]{geometry}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={\projecttitle},
+            pdfsubject={CSE558 Data Science, Monsoon 2026: Midterm Project Report}}
+
+%------------------------------------------------------------- layout
+\definecolor{eg}{HTML}{7396C4}         % worked example (light blue)
+\definecolor{hintgrey}{gray}{0.58}     % instructions (light grey)
+
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{12pt}{3pt}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{10pt}{2pt}
+\newcommand{\sectionbreak}{\needspace{10\baselineskip}}
+\newcommand{\subsectionbreak}{\needspace{10\baselineskip}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist{leftmargin=1.2em, itemsep=2pt, topsep=2pt, parsep=0pt}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{K}[1]{>{\raggedright\arraybackslash\bfseries\boldmath}p{#1}}  % bold labels
+
+%--------------------------------------------------------- shorthands
+\newcommand{\hint}[1]{\ifshowhints{\footnotesize\itshape\color{hintgrey}#1\par}\fi}
+% The worked example was light blue; our own text is set in normal ink.
+\newcommand{\eg}[1]{#1}
+\newcommand{\egblock}[1]{{#1\par}}
+\newcommand{\field}[2]{\textbf{#1}~\eg{#2}\par}
+\newcommand{\tpart}[2]{\par\needspace{12\baselineskip}\smallskip\textbf{#1)~#2}\par}
+\newcommand{\minihead}[1]{\par\needspace{8\baselineskip}\smallskip\textbf{#1}\par}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\figfile}[2]{%
+  \IfFileExists{#1}%
+    {\includegraphics[width=\linewidth,height=#2,keepaspectratio]{#1}}%
+    {\fbox{\parbox[c][#2][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}%
+      {\centering\small\itshape\color{hintgrey}Your plot: \detokenize{#1}}}}}
+% Details only the group can supply (shown in red until replaced).
+\newcommand{\fillin}[1]{\textcolor{red}{[#1]}}
+
+%=======================================================================
+\begin{document}
+
+\twocolumn[%
+{\small\bfseries CSE558 Data Science\ \ \textbullet\ \ Midterm Project Report\ \ \textbullet\ \ Monsoon 2026\par}
+\vspace{4pt}
+{\LARGE\bfseries\raggedright\projecttitle\par}
+\vspace{6pt}
+\rule{\linewidth}{1pt}
+
+{\small
+\begin{tabularx}{\linewidth}{@{}K{2.4cm} Y@{}}
+\toprule
+Group name & \fillin{group name} \\
+Dataset & insideairbnb.com/get-the-data: London, snapshot of 17 September 2026, file \code{listings.csv.gz} (CC BY 4.0) \\
+Code & \href{https://github.com/Nishant7p/DataSci-Project}{github.com/Nishant7p/DataSci-Project} (notebook \code{notebooks/midterm\_analysis.ipynb}, source in \code{src/}, README) \\
+\bottomrule
+\end{tabularx}}
+
+\vspace{2pt}
+{\small
+\begin{tabularx}{\linewidth}{@{}L{0.5cm} L{3.4cm} L{2.3cm} L{4.8cm} Y@{}}
+\toprule
+\textbf{\#} & \textbf{Name} & \textbf{Roll no.} & \textbf{Institute email} & \textbf{Contribution} \\
+\midrule
+1 & Nischay Soni & 2023353 & nischay23353@iiitd.ac.in & Equal contribution (all sections) \\
+2 & Nishant Tomer & 2023355 & nishant23355@iiitd.ac.in & Equal contribution (all sections) \\
+3 & Sarthak & 2023490 & sarthak23490@iiitd.ac.in & Equal contribution (all sections) \\
+4 & Syed Musa Kazim & 2023543 & syed23543@iiitd.ac.in & Equal contribution (all sections) \\
+5 & Yash & 2023605 & yash23605@iiitd.ac.in & Equal contribution (all sections) \\
+\bottomrule
+\end{tabularx}}
+\vspace{12pt}
+]
+
+%-----------------------------------------------------------------------
+\section{Dataset}
+
+\field{Source:}{Inside Airbnb (insideairbnb.com), London snapshot compiled on 17 September 2026,
+detailed listings file \code{listings.csv.gz}, downloaded on 26 October 2026 from the original
+site rather than from one of the older Kaggle re-uploads; the notebook checks its SHA-256.
+Licence CC BY 4.0. One row is one Airbnb listing.}
+
+\field{What is raw about it:}{prices are text (\code{"\$267.50"}) although Airbnb's own quotes give
+the currency as GBP; bathrooms exist only as text in 47 forms (\code{"1.5 shared baths"});
+amenities are JSON lists with 9{,}477 distinct strings; 15 columns are completely empty; 34.9\%
+of prices and 22.5\% of ratings are missing; 179 units are listed twice; 47{,}950 descriptions
+carry HTML; 7 rows have an impossible average below 1 star; minimum stays reach 1{,}125 nights.}
+
+{\small
+\begin{tabularx}{\linewidth}{@{}L{3.0cm} Y Y@{}}
+\toprule
+ & \textbf{Raw file} & \textbf{After encoding} \\
+\midrule
+Instances (rows) & 91{,}954 & 91{,}775 \\
+Attributes (columns) & 90 & 219 \\
+Instances $\times$ attributes & 8{,}275{,}860 & 20{,}098{,}725 \\
+\bottomrule
+\end{tabularx}}
+
+\field{Size check:}{$91{,}775\times219=20{,}098{,}725\ge3{,}000{,}000$, so the requirement is met;
+the raw file already passes ($91{,}954\times90=8{,}275{,}860$). Encoding adds 33 borough, 4
+room-type and 22 property-type indicators and 100 amenity indicators to 48 numeric and 12 flag
+columns.}
+
+\minihead{Key features}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.55cm} L{1.4cm} Y@{}}
+\toprule
+\textbf{Feature} & \textbf{Type} & \textbf{Real-world meaning} \\
+\midrule
+\code{review\_scores\_\allowbreak rating} & continuous & average overall guest rating, 1--5 stars; response for P1 \\
+\code{review\_scores\_\allowbreak accuracy} & continuous & average ``did the place match its page?'' score; response for P2 \\
+\code{host\_london\_\allowbreak listings} & discrete & listings the host runs in London (1--501), recounted after removing duplicates \\
+\code{neighbourhood\_\allowbreak cleansed} & nominal & London borough, 33 levels \\
+\code{room\_type} & nominal & entire home, private room, hotel room, shared room \\
+\code{bedrooms} & discrete & bedrooms, 0 (studio) to 30 \\
+\code{price} & continuous & nightly price in GBP, \pounds10 to \pounds75{,}000 \\
+\code{number\_of\_\allowbreak reviews} & discrete & reviews behind the averages, 0 to 1{,}959 \\
+\code{hype\_count} & discrete & marketing superlatives in the description, 0 to 10 (derived) \\
+\bottomrule
+\end{tabularx}}
+
+The full data dictionary (type, unit, range and missingness of all 90 raw and 11 derived
+attributes) is \code{docs/data\_dictionary.md} in the repository.
+
+%-----------------------------------------------------------------------
+% The template's \needspace before a section miscounts the space left on page 1 of a
+% two-column document and pushed this section to page 2; it is switched off here only.
+\begingroup\renewcommand{\sectionbreak}{}
+\section{Data preparation}
+\endgroup
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
+\toprule
+\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
+\midrule
+15 columns 100\% empty (e.g.\ \code{license})
+ & dropped
+ & Airbnb no longer exposes them; nothing to impute from \\
+7 redundant columns (5 price quotes, 2 constant)
+ & dropped
+ & the quoted price equals \code{price} for 99.8\% of listings \\
+\code{price} is text, \code{"\$267.50"}
+ & parsed to a number in GBP
+ & a format fix; the \$ is an export artefact, the quotes say GBP \\
+\bottomrule
+\end{tabularx}}
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
+\toprule
+\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
+\midrule
+32{,}049 prices missing (34.9\%)
+ & kept, flagged, not imputed
+ & 92.7\% were carried over from an earlier scrape and 87.3\% have zero availability (0.5\% of priced ones): they cannot be booked, so an imputed price would invent a market. No test uses price \\
+20{,}694 ratings missing
+ & kept, flagged; tests use only listings with 10+ reviews
+ & no reviews means no rating, not a bad one; 10 is also the stay count Airbnb requires for Superhost \\
+7 rows with a score average below 1
+ & scores set to missing, flagged
+ & a 1--5 star average cannot be below 1: these are recording errors \\
+\bottomrule
+\end{tabularx}}
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{1.95cm} L{2.2cm} Y@{}}
+\toprule
+\textbf{Issue found} & \textbf{What we did} & \textbf{Why, and not the alternative} \\
+\midrule
+179 units listed twice (173 same host, name and spot; 6 same text and spot under two accounts)
+ & extra copies dropped, the one with most reviews kept
+ & 95 copies belong to hosts with 10+ listings, the group P1 studies; left in, they would count those hosts twice \\
+bathrooms only as text, 47 forms
+ & parsed to a count plus shared and private flags
+ & one string carries two facts \\
+540 prices outside the log-price IQR fences, \pounds19 and \pounds1{,}366
+ & capped at the fences, flagged
+ & prices are right-skewed (median \pounds175, max \pounds75{,}000), so fences go on log price; raw-scale fences would cut ordinary luxury homes \\
+24 minimum stays above 365 nights (max 1{,}125)
+ & capped at 365, flagged
+ & 1{,}125 is Airbnb's form maximum, a placeholder for ``long lets only'' \\
+HTML in 47{,}950 descriptions
+ & tags stripped
+ & markup is not words; needed before counting hype words \\
+89 property types; 9{,}477 amenity strings
+ & 21 types with 30+ exploration rows kept, rest \code{Other}; 100 commonest amenities as 0/1
+ & rare levels give unstable estimates; fences and levels are fitted on the exploration split only, so the confirmation split stays unseen \\
+\bottomrule
+\end{tabularx}}
+
+%-----------------------------------------------------------------------
+\section{What changed after preparation}
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{3.1cm} L{1.5cm} Y@{}}
+\toprule
+\textbf{Measure} & \textbf{Before} & \textbf{After} \\
+\midrule
+Rows & 91{,}954 & 91{,}775 \\
+Attributes & 90 & 219 \\
+Instances $\times$ attributes & 8{,}275{,}860 & 20{,}098{,}725 \\
+Empty columns & 15 & 0 \\
+Duplicate units & 179 & 0 \\
+Prices stored as text & 59{,}905 & 0 \\
+Prices outside the fences & 542 & 0 (capped) \\
+Minimum stays above 365 nights & 24 & 0 (capped) \\
+Score averages below 1 & 7 & 0 (set missing) \\
+Missing price & 32{,}049 & 32{,}012 (kept, flagged) \\
+Missing rating & 20{,}694 & 20{,}628 (kept, flagged) \\
+\bottomrule
+\end{tabularx}}
+
+We lost 179 rows (duplicate units) and 22 columns (15 empty, 7 redundant), and imputed nothing.
+We gained a numeric price and bathroom count, a flag for every structural gap and 219
+model-ready attributes. The 32{,}012 unpriced and 20{,}628 unrated listings stay in the data for
+the modelling stage but never enter a test.
+
+%-----------------------------------------------------------------------
+\section{Basic questions and problem statement}
+
+\field{Split before exploring:}{we shuffled the 51{,}348 hosts with seed 558 and put 30\% of them,
+with all their listings, in an exploration split (15{,}404 hosts, 27{,}586 listings); the other
+35{,}944 hosts (64{,}189 listings) form the confirmation split. Splitting by host keeps one
+operator's listings on one side. Figures 1--4 use the exploration split only; Section 5 uses the
+confirmation split only. Every listing's side is saved in
+\code{outputs/tables/split\_assignment.csv.gz}.}
+
+\begin{figure}[!ht]
+  \figfile{fig2_host_concentration.pdf}{3.7cm}
+  \caption{Hosts with 10+ London listings are 1.7\% of hosts but run 25.1\% of listings; four
+  in five hosts have a single listing.}
+\end{figure}
+
+\begin{figure}[!ht]
+  \figfile{fig1_rating_ecdf.pdf}{4.7cm}
+  \caption{Among established entire homes (10+ reviews), 70.9\% of large-host listings sit below
+  the 4.8 Superhost bar, against 33.8\% of single-host ones (medians 4.68 and 4.87).}
+\end{figure}
+
+\begin{figure}[!ht]
+  \figfile{fig3_large_share_by_borough.pdf}{7.8cm}
+  \caption{Of the established entire homes run by single or large hosts, large hosts run 5.0\%
+  in Bexley but 71.8\% in the City of London, and mean ratings range from 4.60 to 4.87 across
+  boroughs: borough must be held fixed.}
+\end{figure}
+
+\begin{figure}[!ht]
+  \figfile{fig4_accuracy_by_hype.pdf}{4.3cm}
+  \caption{Accuracy hardly moves with hype words: 4.775 with none and 4.777 to 4.799 with one
+  or more, all within 0.025 of the no-hype mean (the axis spans $\pm$0.10 star).}
+\end{figure}
+
+\minihead{Basic questions (quick answers from the exploration split)}
+\begin{enumerate}[label=\arabic*.]
+  \item Which boroughs are the most expensive? (Westminster, City of London, Kensington and
+  Chelsea: median entire home \pounds295--\pounds304 a night)
+  \item Do entire homes cost more than private rooms? (median \pounds224 against \pounds80)
+  \item Do Superhosts get higher ratings? (4.86 against 4.68 on average)
+  \item Do listings with more reviews rate higher? (barely: Spearman $\rho=0.01$)
+\end{enumerate}
+
+\par\smallskip\noindent\begin{minipage}{\linewidth}
+\textbf{Our problem statements}\par\smallskip
+\noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\textbf{P1 (primary).} Among comparable entire homes (same borough and number of bedrooms), do
+listings run by hosts with 10 or more London listings get different guest ratings from
+listings run by single-listing hosts?
+
+\smallskip
+\textbf{P2.} Among established entire homes, do listings whose descriptions pile on marketing
+superlatives get a different accuracy score (the guests' rating of whether the place matched
+its page) from plainly described ones?
+\end{minipage}}
+\end{minipage}
+
+
+\field{How they are novel:}{the basic questions read one column of a listing against another.
+Ours depend on who runs the listing, a portfolio size that no row records directly (we recount
+it per host after removing duplicates), compared like for like within 99 borough-by-bedroom
+strata; and on a feature built from the description text, matched to the one score that
+measures whether a listing kept its word.}
+
+\field{Causal flavour:}{P1 asks whether big operators ``drag ratings down'', which sounds causal.
+Our design only holds borough and size fixed; operators also differ in property type, pricing
+and guests. A causal claim would need the same property observed before and after a change of
+operator (quarterly snapshots as a panel) or random assignment, which a single snapshot cannot
+give.}
+
+%-----------------------------------------------------------------------
+\section{Statistical inferences}
+
+\field{Rows tested:}{the 17{,}929 established entire homes (10+ reviews) of the confirmation split.
+P1 compares the 7{,}197 listings of single-listing hosts ($S$) with the 5{,}288 listings of the
+477 hosts with 10+ London listings ($L$); the 5{,}439 listings of hosts with 2--9 listings (a
+middle group, not used) and 5 without a bedroom count are left out, leaving 12{,}485 listings
+in 99 borough-by-bedroom-band strata (0--1, 2, 3+), 96 of which contain both groups. P2 keeps one
+random listing per host (seed 558): 2{,}470 \emph{hyped} listings (2+ hype words) and 4{,}908
+\emph{plain} ones (none). The four tests form one family: decisions use Holm-adjusted p-values
+at a family-wise $\alpha=0.05$. All settings were saved in \code{docs/preregistration.json}
+before any test ran.}
+
+%------------------------------------------------------------ Test 1
+\subsection*{Test 1 (P1): does a comparable large-host listing rate differently?}
+
+\tpart{a}{Hypotheses, written before running the test}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+$H_0$ & $\beta=0$ \\
+$H_1$ & $\beta\neq0$ \\
+Significance level & $\alpha=0.05$ (family-wise, Holm) \\
+Side & two-sided \\
+Test & t-test on the within-stratum gap with host-clustered standard errors \\
+Smallest difference that matters & 0.10 star \\
+\bottomrule
+\end{tabularx}}
+
+$\beta$: gap in mean overall rating, $L$ minus $S$, within borough-by-bedroom strata.
+Two-sided, because professional operators could plausibly rate higher (consistent service) as
+well as lower. 0.10 star, because the middle half of established ratings spans only 4.62 to
+4.91, and 0.10 star moves a median listing (4.79) across Airbnb's 4.8 Superhost bar.
+
+\tpart{b}{Other tests we considered}
+Two independent groups, a continuous response and an unknown $\sigma$ call for a two-sample
+t-test, with two changes the data forces. Borough confounds host type (Figure 3), so we
+compare within strata (one intercept per stratum). And a large host's ratings share one
+operator, so they are not independent: we use host-clustered (CR1) standard errors and $t$ with
+$G-1$ degrees of freedom, $G$ being the number of hosts.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
+\toprule
+\textbf{Also considered} & \textbf{Why we did not use it} \\
+\midrule
+Welch t-test & ignores strata and clustering; gives $-0.154$ ($t=-39.1$, 9{,}512 d.f.) with a
+standard error a third of the clustered one (0.0039 against 0.0118) \\
+Pooled t-test & assumes equal spreads, which Brown--Forsythe rejects (SD 0.239 against 0.182,
+$F=416.9$, $p<0.001$) \\
+Mann--Whitney U & tests a shift in ranks, not stars, and ties at 5.0 are common; agrees in
+direction: $P(L>S)=0.29$, $p<0.001$ \\
+Stratified permutation & assumes no distribution and gives the same answer ($-0.149$,
+$p=0.0001$, the smallest possible with 10{,}000 permutations), but treats listings in a stratum
+as exchangeable, ignoring the host clusters \\
+z-test, paired t-test & $\sigma$ unknown; nothing to pair \\
+\bottomrule
+\end{tabularx}}
+
+\tpart{c}{Result}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+Estimate & $-0.145$ star (raw means 4.66 for $L$, 4.81 for $S$) \\
+95\% confidence interval & $-0.168$ to $-0.122$ \\
+Test statistic (d.f.) & $t=-12.34$ (7{,}673) \\
+p-value & $1.1\times10^{-34}$ (Holm: $2.3\times10^{-34}$) \\
+Decision & reject $H_0$ \\
+\bottomrule
+\end{tabularx}}
+
+Comparable large-host homes rate 0.145 star lower. The whole interval lies beyond $-0.10$ star,
+so the gap matters by our standard. It also survives a conservative 476 degrees of freedom (one
+per large host, $p\approx10^{-30}$).
+
+%------------------------------------------------------------ Test 2
+\subsection*{Test 2 (P1): do large-host listings miss the Superhost bar more often?}
+
+\tpart{a}{Hypotheses, written before running the test}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+$H_0$ & $\theta=1$ \\
+$H_1$ & $\theta\neq1$ \\
+Significance level & $\alpha=0.05$ (family-wise, Holm) \\
+Side & two-sided \\
+Test & Cochran--Mantel--Haenszel (CMH) \\
+Smallest difference that matters & odds ratio outside 0.80--1.25 \\
+\bottomrule
+\end{tabularx}}
+
+$\theta$: common odds ratio, across strata, of a rating below 4.8 for $L$ against $S$. 4.8 is
+the rating Airbnb requires for Superhost status; at the exploration single-host rate of 33.8\%
+below it, an odds ratio of 1.25 means one more listing in twenty falls short.
+
+\tpart{b}{Other tests we considered}
+A 0/1 outcome compared between two groups across 96 strata calls for the CMH test, which pools
+the strata's $2\times2$ tables without fitting a model.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
+\toprule
+\textbf{Also considered} & \textbf{Why we did not use it} \\
+\midrule
+Pooled $\chi^2$, two-proportion z-test & ignore the strata; give $\chi^2=1{,}162$ ($z=34.1$,
+$z^2=\chi^2$) and an odds ratio of 3.59, inflated by the borough mix \\
+Fisher's exact test & meant for small counts; with 12{,}443 listings the $\chi^2$ approximation
+is accurate \\
+Logistic regression with stratum terms & asks the same question through a model; CMH needs
+none \\
+Breslow--Day (assumption check) & rejects a common odds ratio ($\chi^2=223.4$, 95 d.f.), so the
+estimate is an average over strata; with one listing per host it does not reject ($p=0.20$) and
+the odds ratio is 3.06 (2.50 to 3.73) \\
+\bottomrule
+\end{tabularx}}
+
+\tpart{c}{Result}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+Estimate & odds ratio 3.22 (65.5\% of $L$ and 34.6\% of $S$ below 4.8) \\
+95\% confidence interval & 2.97 to 3.49 \\
+Test statistic (d.f.) & $\chi^2_{\mathrm{MH}}=838.2$ (1) \\
+p-value & $2.7\times10^{-184}$ (Holm: $1.1\times10^{-183}$) \\
+Decision & reject $H_0$ \\
+\bottomrule
+\end{tabularx}}
+
+Within the same borough and bedroom band, a large-host listing has 3.2 times the odds of falling
+below the Superhost bar. The whole interval lies above 1.25, so the difference matters.
+
+%------------------------------------------------------------ Test 3
+\subsection*{Test 3 (P1): with every host counted once, do large hosts rate lower?}
+
+\tpart{a}{Hypotheses, written before running the test}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+$H_0$ & $\mu_L-\mu_S=0$ \\
+$H_1$ & $\mu_L-\mu_S\neq0$ \\
+Significance level & $\alpha=0.05$ (family-wise, Holm) \\
+Side & two-sided \\
+Test & Welch t-test \\
+Smallest difference that matters & 0.10 star \\
+\bottomrule
+\end{tabularx}}
+
+$\mu_L$, $\mu_S$: mean rating of a host's established entire homes, averaged per host (477
+large hosts, 7{,}197 single hosts). Averaging removes the dependence within a host by design
+rather than by a model.
+
+\tpart{b}{Other tests we considered}
+Two independent groups of hosts, very unequal in size and spread: Welch's t-test.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
+\toprule
+\textbf{Also considered} & \textbf{Why we did not use it} \\
+\midrule
+Pooled t-test & Brown--Forsythe rejects equal variances ($F=9.58$, $p=0.002$); run anyway, it
+gives $t=-18.96$ and the same decision \\
+Mann--Whitney U & tests ranks, not stars; agrees: $P(L>S)=0.24$, $p<0.001$ \\
+Permutation test & also valid; $p=0.0002$, the smallest two-sided value 10{,}000 resamples can
+give \\
+Stratified tests & a host's listings span several boroughs, so host means cannot be stratified;
+Tests 1 and 2 cover that \\
+\bottomrule
+\end{tabularx}}
+
+\tpart{c}{Result}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+Estimate & $-0.164$ star (host means 4.65 for $L$, 4.81 for $S$) \\
+95\% confidence interval & $-0.182$ to $-0.146$ \\
+Test statistic (d.f.) & $t=-17.85$ (532.4) \\
+p-value & $3.4\times10^{-56}$ (Holm: $1.0\times10^{-55}$) \\
+Decision & reject $H_0$ \\
+\bottomrule
+\end{tabularx}}
+
+The typical large operator rates 0.16 star below the typical single host. The interval lies
+beyond $-0.10$ star, so this gap matters too.
+
+%------------------------------------------------------------ Test 4
+\needspace{24\baselineskip}  % keep the heading with its hypotheses table
+\subsection*{Test 4 (P2): do hyped descriptions change the accuracy score?}
+
+\tpart{a}{Hypotheses, written before running the test}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+$H_0$ & $\delta=0$ \\
+$H_1$ & $\delta\neq0$ \\
+Significance level & $\alpha=0.05$ (family-wise, Holm) \\
+Side & two-sided \\
+Test & stratified permutation test (10{,}000 permutations) \\
+Smallest difference that matters & 0.10 star \\
+\bottomrule
+\end{tabularx}}
+
+$\delta$: gap in mean accuracy score, hyped minus plain, averaged over borough-by-host-class
+strata. Hyped means 2 or more words from a fixed list of 34 superlatives (``perfect'',
+``stunning'', ``luxury'', \dots): the largest count still covering 15\% of exploration listings
+(23.8\% have 2+). Two-sided, because the exploration split showed no direction (Figure 4).
+0.10 star, because Airbnb shows category scores such as accuracy to one decimal.
+
+\tpart{b}{Other tests we considered}
+Accuracy averages are bounded and bunched near 5 (median 4.83), so a permutation test avoids
+assuming normality; permuting labels within strata holds borough and operator type fixed; and
+one listing per host stops big operators' copied descriptions from counting many times.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.3cm} Y@{}}
+\toprule
+\textbf{Also considered} & \textbf{Why we did not use it} \\
+\midrule
+Welch t-test & ignores the strata; $+0.005$, $p=0.28$ \\
+Mann--Whitney U & ranks with many ties, and ignores the strata; $p=0.25$ \\
+Unstratified permutation & same as ours without the strata; $p=0.28$ \\
+Spearman correlation & uses every hype count (a dose--response check), but no strata;
+$\rho=0.017$, $p=0.08$ ($n=10{,}513$) \\
+\bottomrule
+\end{tabularx}}
+
+\tpart{c}{Result}
+{\small
+\begin{tabularx}{\linewidth}{@{}K{3.4cm} Y@{}}
+\toprule
+Estimate & $+0.008$ star (4.825 hyped, 4.821 plain) \\
+95\% confidence interval & $+0.0004$ to $+0.016$ (stratified bootstrap, 5{,}000 resamples) \\
+Test statistic (d.f.) & the stratified gap itself; d.f. not applicable (permutation test) \\
+p-value & 0.044 (Monte Carlo SE 0.002; Holm: 0.044) \\
+Decision & reject $H_0$ \\
+\bottomrule
+\end{tabularx}}
+
+Hyped listings score very slightly higher on accuracy, the opposite of the ``overselling
+backfires'' idea, and only once borough and host class are held fixed: the unstratified tests
+give $p\approx0.28$. The whole interval lies inside $\pm0.10$ star, so whatever the gap is, it is
+far too small to matter.
+
+\minihead{Summary of the four tests}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{0.55cm} L{3.05cm} L{1.55cm} Y@{}}
+\toprule
+\textbf{Test} & \textbf{Estimate (95\% CI)} & \textbf{Holm p} & \textbf{Verdict} \\
+\midrule
+T1 & $-0.145$ star ($-0.168$, $-0.122$) & $2.3\times10^{-34}$ & reject; matters \\
+T2 & odds ratio 3.22 (2.97, 3.49) & $1.1\times10^{-183}$ & reject; matters \\
+T3 & $-0.164$ star ($-0.182$, $-0.146$) & $1.0\times10^{-55}$ & reject; matters \\
+T4 & $+0.008$ star ($+0.0004$, $+0.016$) & 0.044 & reject; too small to matter \\
+\bottomrule
+\end{tabularx}}
+
+For P1, three designs that handle the data's two problems in different ways (strata for the
+borough mix, clusters or host-level units for repeated operators) agree: a large-host home rates
+about 0.15 star lower than a comparable single-host home and has about three times the odds of
+missing the Superhost bar. For P2, hype in a description makes no difference a guest could see.
+
+%-----------------------------------------------------------------------
+\section{Limitations}
+
+\begin{itemize}
+  \item \textbf{Association, not cause.} Large operators differ from single hosts in more than
+  size (property type, pricing, guests, house rules); our strata hold only borough and bedrooms
+  fixed.
+  \item \textbf{Established entire homes, one snapshot.} The tests cover entire homes with 10+
+  reviews on 17 September 2026, not private rooms, new listings or listings that had already
+  left Airbnb.
+  \item \textbf{Compressed ratings.} Half of established ratings lie between 4.62 and 4.91, and
+  each average rests on a different number of reviews; our tests do not weight by that
+  precision.
+  \item \textbf{Dependence handled only in part.} Test 1 clusters by host, but only 477 clusters
+  carry the treatment, so its 7{,}673 d.f. may be generous (with 476 d.f. the result stands).
+  Test 2 treats listings as independent; with one listing per host its odds ratio is 3.06.
+  \item \textbf{A pooled odds ratio over unequal strata.} Breslow--Day rejects a common odds
+  ratio, so 3.22 averages different stratum effects.
+  \item \textbf{Missing prices are not random.} 35\% of listings have no price because they cannot
+  be booked; conclusions about price would not generalise, which is why no test uses it.
+  \item \textbf{A crude hype measure.} A fixed English word list misses context (``perfect for
+  families'') and other languages, and host size counts London listings only (Airbnb-wide
+  portfolios reach 5{,}777).
+\end{itemize}
+
+\end{document}

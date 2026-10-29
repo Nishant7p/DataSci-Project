@@ -1,0 +1,15 @@
+# environment
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# data: downloaded by the notebook (checksum-verified), not committed
+data/raw/
+data/processed/
+
+# LaTeX build files
+*.log
+*.aux
+*.out

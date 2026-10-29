@@ -1,0 +1,260 @@
+{
+  "samples": {
+    "p1_listings": 12485,
+    "p1_large": 5288,
+    "p1_single": 7197,
+    "p1_large_hosts": 477,
+    "p1_hosts": 7674,
+    "p1_strata": 99
+  },
+  "T1": {
+    "test": "stratum fixed effects + host-clustered SE",
+    "estimate": -0.14502096757616495,
+    "se": 0.011749794954375895,
+    "statistic": -12.342425390338901,
+    "df": 7673,
+    "p": 1.1398544503477507e-34,
+    "ci_low": -0.16805377577497474,
+    "ci_high": -0.12198815937735517,
+    "clusters": 7674,
+    "n": 12485,
+    "strata": 99,
+    "strata_with_both_groups": 96,
+    "iid_se": 0.004093773121166513,
+    "iid_statistic": -35.424769102700424,
+    "iid_df": 12385.0,
+    "iid_p": 6.466960568610273e-262,
+    "mean_large": 4.6612159606656585,
+    "mean_single": 4.8147811588161735,
+    "verdict": "beyond the smallest difference that matters"
+  },
+  "T1_alt": {
+    "welch_unadjusted": {
+      "test": "Welch t",
+      "n1": 5288,
+      "n2": 7197,
+      "mean1": 4.6612159606656585,
+      "mean2": 4.8147811588161735,
+      "estimate": -0.15356519815051506,
+      "se": 0.003924654141262291,
+      "statistic": -39.128339115538914,
+      "df": 9511.628098472336,
+      "p": 1.19164712491453e-310,
+      "ci_low": -0.16125835787973128,
+      "ci_high": -0.14587203842129884
+    },
+    "pooled_unadjusted": {
+      "test": "pooled t",
+      "estimate": -0.15356519815051506,
+      "statistic": -40.732114318987,
+      "df": 12483,
+      "p": 0.0,
+      "ci_low": -0.16095522562691766,
+      "ci_high": -0.14617517067411245
+    },
+    "brown_forsythe": {
+      "test": "Brown-Forsythe",
+      "statistic": 416.9200613525757,
+      "df": [
+        1,
+        12483
+      ],
+      "p": 3.4992797523667505e-91,
+      "sd1": 0.23872948864441612,
+      "sd2": 0.18245164303533837
+    },
+    "mann_whitney": {
+      "test": "Mann-Whitney U",
+      "statistic": 10985469.5,
+      "p": 0.0,
+      "prob_superiority": 0.2886527327847353
+    },
+    "stratified_permutation": {
+      "test": "stratified permutation",
+      "estimate": -0.14863630400692932,
+      "p": 9.999000099990002e-05,
+      "n_perm": 10000,
+      "strata_used": 96,
+      "n": 12443,
+      "null_sd": 0.004375318175173432
+    }
+  },
+  "T2": {
+    "test": "Cochran-Mantel-Haenszel",
+    "statistic": 838.2062565714218,
+    "df": 1,
+    "p": 0.0,
+    "estimate": 3.219950994962795,
+    "ci_low": 2.9678779181861943,
+    "ci_high": 3.4934335898487046,
+    "strata_used": 96,
+    "breslow_day_stat": 223.3607919281726,
+    "breslow_day_p": 2.413513833232628e-12,
+    "pooled_table": [
+      [
+        3465.0,
+        1823.0
+      ],
+      [
+        2479.0,
+        4676.0
+      ]
+    ],
+    "n_in_strata": 12443,
+    "share_large": 0.6552571860816944,
+    "share_single": 0.34647099930118797,
+    "verdict": "beyond the smallest difference that matters"
+  },
+  "T2_alt": {
+    "chi2": 1162.027956979185,
+    "chi2_df": 1,
+    "chi2_p": 1.0909229260596714e-254,
+    "z": 34.08853116488278,
+    "z_p": 1.090922926059785e-254,
+    "fisher_or": 3.5852095617448776,
+    "fisher_p": 2.4253799007973116e-258,
+    "share_treated": 0.6552571860816944,
+    "share_control": 0.34647099930118797
+  },
+  "T2_one_per_host": {
+    "test": "Cochran-Mantel-Haenszel",
+    "statistic": 131.1106837562185,
+    "df": 1,
+    "p": 0.0,
+    "estimate": 3.0579411187209886,
+    "ci_low": 2.5042928519134056,
+    "ci_high": 3.7339897681774468,
+    "strata_used": 76,
+    "breslow_day_stat": 85.02032587595025,
+    "breslow_day_p": 0.20095726808774628,
+    "n_in_strata": 7146
+  },
+  "T3": {
+    "test": "Welch t",
+    "n1": 477,
+    "n2": 7197,
+    "mean1": 4.650431728583962,
+    "mean2": 4.814781158816173,
+    "estimate": -0.16434943023221038,
+    "se": 0.00920779798905775,
+    "statistic": -17.848939608310037,
+    "df": 532.4005970372785,
+    "p": 3.3885247213661005e-56,
+    "ci_low": -0.18243750262932443,
+    "ci_high": -0.14626135783509633,
+    "verdict": "beyond the smallest difference that matters"
+  },
+  "T3_alt": {
+    "pooled": {
+      "test": "pooled t",
+      "estimate": -0.16434943023221038,
+      "statistic": -18.964942784053214,
+      "df": 7672,
+      "p": 2.0277906490737762e-78,
+      "ci_low": -0.18133707920283898,
+      "ci_high": -0.14736178126158178
+    },
+    "brown_forsythe": {
+      "test": "Brown-Forsythe",
+      "statistic": 9.580159653024475,
+      "df": [
+        1,
+        7672
+      ],
+      "p": 0.0019739970082968544,
+      "sd1": 0.19553889951454123,
+      "sd2": 0.18245164303533837
+    },
+    "mann_whitney": {
+      "test": "Mann-Whitney U",
+      "statistic": 819774.5,
+      "p": 6.774344600724754e-82,
+      "prob_superiority": 0.23879461189425247
+    },
+    "permutation": {
+      "test": "permutation (difference in means)",
+      "statistic": -0.16434943023221038,
+      "p": 0.00019998000199980003,
+      "n_resamples": 10000
+    }
+  },
+  "T3_n": {
+    "large_hosts": 477,
+    "single_hosts": 7197
+  },
+  "T4": {
+    "test": "stratified permutation",
+    "estimate": 0.008461484447504948,
+    "p": 0.0443955604439556,
+    "n_perm": 10000,
+    "strata_used": 92,
+    "n": 7367,
+    "null_sd": 0.004221053213785851,
+    "ci_low": 0.00038721825949908546,
+    "ci_high": 0.016413616530785744,
+    "n_hyped": 2470,
+    "n_plain": 4908,
+    "mean_hyped": 4.825408906882592,
+    "mean_plain": 4.820719233903831,
+    "verdict": "within the no-practical-difference band"
+  },
+  "T4_alt": {
+    "welch_unstratified": {
+      "test": "Welch t",
+      "n1": 2470,
+      "n2": 4908,
+      "mean1": 4.825408906882592,
+      "mean2": 4.820719233903831,
+      "estimate": 0.004689672978760662,
+      "se": 0.004335142656928417,
+      "statistic": 1.0817805433151397,
+      "df": 5030.050919125556,
+      "p": 0.27940191227193945,
+      "ci_low": -0.0038090955191430603,
+      "ci_high": 0.013188441476664384
+    },
+    "mann_whitney": {
+      "test": "Mann-Whitney U",
+      "statistic": 6160615.5,
+      "p": 0.24953076164554988,
+      "prob_superiority": 0.5081858834126882
+    },
+    "permutation_unstratified": {
+      "test": "permutation (difference in means)",
+      "statistic": 0.004689672978760662,
+      "p": 0.27957204279572045,
+      "n_resamples": 10000
+    },
+    "spearman_dose_response": {
+      "test": "Spearman",
+      "statistic": 0.017038684479419305,
+      "p": 0.08064684966094218,
+      "n": 10513
+    }
+  },
+  "holm": {
+    "T2": 0.0,
+    "T3": 1.0165574164098301e-55,
+    "T1": 2.2797089006955014e-34,
+    "T4": 0.0443955604439556
+  },
+  "alpha": 0.05,
+  "extras": {
+    "confirmation_established_entire_homes": 17929,
+    "excluded_small_host_listings": 5439,
+    "excluded_missing_bedrooms": 5,
+    "t1_conservative_df": 476,
+    "t1_conservative_log10_p": -29.831330055019876,
+    "t1_log10_p": -33.94315060080951,
+    "t1_se_inflation": 2.8701627097077167,
+    "t2_log10_p": -183.5744279378137,
+    "t2_breslow_day_df": 95,
+    "t2_pooled_log10_p": -253.96220593132676,
+    "t2_one_per_host_log10_p": -29.630453737363695,
+    "t3_log10_p": -55.46998934156778,
+    "t4_p_mc_se": 0.002059723152679085,
+    "t4_hyped_share_large_hosts": 7.28744939271255,
+    "t4_plain_share_large_hosts": 5.6642216788916055,
+    "t4_hosts": 7378
+  }
+}

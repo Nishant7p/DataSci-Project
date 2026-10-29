@@ -1,0 +1,170 @@
+{
+  "exploration_listings": 27586,
+  "exploration_hosts": 15404,
+  "established_entire_homes": 7797,
+  "concentration": {
+    "single (1)": {
+      "hosts": 12372,
+      "listings": 12372,
+      "share_hosts": 80.32,
+      "share_listings": 44.85
+    },
+    "small (2-9)": {
+      "hosts": 2772,
+      "listings": 8277,
+      "share_hosts": 18.0,
+      "share_listings": 30.0
+    },
+    "large (10+)": {
+      "hosts": 260,
+      "listings": 6937,
+      "share_hosts": 1.69,
+      "share_listings": 25.15
+    }
+  },
+  "largest_portfolio_exploration": 273,
+  "entire_home_share_by_class": {
+    "large (10+)": 79.6,
+    "single (1)": 64.8,
+    "small (2-9)": 56.4
+  },
+  "rating_summary": {
+    "single (1)": {
+      "n": 3119,
+      "mean": 4.813773645399166,
+      "median": 4.87,
+      "q1": 4.73,
+      "q3": 4.95,
+      "share_below_4_8": 33.82494389227316,
+      "skewness": -1.667588383935187
+    },
+    "small (2-9)": {
+      "n": 2253,
+      "mean": 4.734695960940968,
+      "median": 4.78,
+      "q1": 4.63,
+      "q3": 4.89,
+      "share_below_4_8": 53.351087438970254,
+      "skewness": -1.265325012418511
+    },
+    "large (10+)": {
+      "n": 2425,
+      "mean": 4.6388,
+      "median": 4.68,
+      "q1": 4.5,
+      "q3": 4.82,
+      "share_below_4_8": 70.9278350515464,
+      "skewness": -0.9407569628219037
+    },
+    "all": {
+      "n": 7797,
+      "mean": 4.736503783506477,
+      "median": 4.79,
+      "q1": 4.62,
+      "q3": 4.91,
+      "share_below_4_8": 51.00679748621264,
+      "share_below_4": 0.5771450557906888,
+      "skewness": -1.2534291452263564,
+      "sd": 0.22213725053030617
+    }
+  },
+  "large_share_by_borough": {
+    "min": 5.0,
+    "min_borough": "Bexley",
+    "max": 71.7948717948718,
+    "max_borough": "City of London",
+    "median": 28.57142857142857
+  },
+  "rating_by_borough": {
+    "min": 4.596111111111111,
+    "min_borough": "Hillingdon",
+    "max": 4.865074626865671,
+    "max_borough": "Richmond upon Thames"
+  },
+  "large_share_by_bedrooms": {
+    "0-1": 44.9,
+    "2": 41.8,
+    "3+": 44.0
+  },
+  "rating_by_bedrooms": {
+    "0-1": 4.717,
+    "2": 4.754,
+    "3+": 4.77
+  },
+  "hype": {
+    "n": 7778,
+    "share_zero": 42.363075340704555,
+    "share_at_least": {
+      "0": 100.0,
+      "1": 57.63692465929545,
+      "2": 23.8364618153767,
+      "3": 8.382617639496015,
+      "4": 2.969915145281563,
+      "5": 0.8999742864489586,
+      "6": 0.282849061455387,
+      "7": 0.08999742864489586
+    },
+    "median_words": 72.0,
+    "top_words": {
+      "perfect": 2336,
+      "beautiful": 934,
+      "stunning": 424,
+      "luxury": 400,
+      "perfectly": 355,
+      "unique": 332,
+      "beautifully": 329,
+      "iconic": 311
+    },
+    "k_hyped": 2
+  },
+  "accuracy_by_hype": {
+    "0": {
+      "size": 3295,
+      "mean": 4.7746,
+      "median": 4.83
+    },
+    "1": {
+      "size": 2629,
+      "mean": 4.7777,
+      "median": 4.82
+    },
+    "2": {
+      "size": 1202,
+      "mean": 4.7768,
+      "median": 4.83
+    },
+    "3": {
+      "size": 421,
+      "mean": 4.7991,
+      "median": 4.85
+    },
+    "4+": {
+      "size": 231,
+      "mean": 4.7877,
+      "median": 4.82
+    }
+  },
+  "accuracy_summary": {
+    "median": 4.83,
+    "q1": 4.68,
+    "q3": 4.92
+  },
+  "obvious": {
+    "median price by room type": {
+      "Entire home/apt": 224.0,
+      "Hotel room": 165.0,
+      "Private room": 80.0,
+      "Shared room": 33.0
+    },
+    "priciest boroughs (median entire home)": {
+      "Kensington and Chelsea": 295.0,
+      "City of London": 296.0,
+      "Westminster": 304.0
+    },
+    "mean rating superhost vs not": {
+      "False": 4.684,
+      "True": 4.857
+    },
+    "spearman rating vs number_of_reviews": 0.01309811140813918
+  }
+}
